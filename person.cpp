@@ -1,14 +1,14 @@
 #include <string>
 #include "person.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 
 int person::getresid() const{
     return resid;
 }
 
-int person::getid() const{
-    return id;
-}
 
 string person::getfirstname() const{
     return firstname;

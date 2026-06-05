@@ -36,40 +36,40 @@ bool userDAO::removebyid(int id){
     return db.executequery(query);
 }
 
-int userDAO::callbackfindall(void* data, int argc, char** argv, char** azcolname){
-    vector<person>* users = (vector<person>*)data;
+// int userDAO::callbackfindall(void* data, int argc, char** argv, char** azcolname){
+//     vector<person>* users = (vector<person>*)data;
 
-    person p;
-    p.setid(atoi(argv[0]));
-    p.setusername(argv[1]);
-    p.setpassword(argv[2]);
-    p.setrole(argv[3]);
-    p.setfirstname(argv[4]);
-    p.setlastname(argv[5]);
-    p.setphonnumber(argv[6]);
-    p.setresid(atoi(argv[7]));
+//     person p;
+//     p.setid(atoi(argv[0]));
+//     p.setusername(argv[1]);
+//     p.setpassword(argv[2]);
+//     p.setrole(argv[3]);
+//     p.setfirstname(argv[4]);
+//     p.setlastname(argv[5]);
+//     p.setphonnumber(argv[6]);
+//     p.setresid(atoi(argv[7]));
 
-    users->push_back(p);
+//     users->push_back(p);
 
-    return 0;
-}
+//     return 0;
+// }
 
-vector<person> userDAO::findall(){
-    vector<person> users;
+// vector<person> userDAO::findall(){
+//     vector<person> users;
 
-    string query = "SELECT * FROM users;";
+//     string query = "SELECT * FROM users;";
 
-    char* errmsg = nullptr;
-    int result = sqlite3_exec(db.getconnection(),query.c_str(), callbackfindall, &users, &errmsg);
+//     char* errmsg = nullptr;
+//     int result = sqlite3_exec(db.getconnection(),query.c_str(), callbackfindall, &users, &errmsg);
 
-    if(result != SQLITE_OK){
-        std::cerr << "error in find all : " << errmsg << std::endl;
-        sqlite3_free(errmsg);
-    }
+//     if(result != SQLITE_OK){
+//         std::cerr << "error in find all : " << errmsg << std::endl;
+//         sqlite3_free(errmsg);
+//     }
 
-    return users;
+//     return users;
     
-}
+// }
 
 int userDAO::callbackfindbyid(void* data, int argc, char** argv, char** azcolname){
     person * user = (person *)data;

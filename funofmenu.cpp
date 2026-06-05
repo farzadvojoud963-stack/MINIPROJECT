@@ -202,8 +202,8 @@ person *signinmenu(database &db)
             cin >> pass;
         }
     }
-
     system("cls");
+    return pr;
 }
 
 void showclientmenu(database &db, client *cl)
@@ -827,7 +827,7 @@ void showadminmenu(database &db, person *pr)
         }else if(choice == 4){
             userDAO user(db);
             vector<person> users = user.findall();
-            cout << "============== the all users info ===================\n"
+            cout << "============== the all users info ===================\n";
             for(int i = 0; i < users.size(); i++){
                 users[i].showinfouser();
             }

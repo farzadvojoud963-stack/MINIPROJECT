@@ -39,8 +39,10 @@ bool database::executequery(const string &query){
     if(result != SQLITE_OK){
         std::cerr <<"error in query : " << errmsg << std::endl;
         sqlite3_free(errmsg);
+        return false;
     }else{
         std::cout << "the query is did successfully\n\n";
+        return true;
     }
 
 }

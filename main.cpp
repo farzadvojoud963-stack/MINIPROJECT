@@ -1,12 +1,20 @@
-#include "funofmenu.h"
-
-#include "database.h"
-
-#include "userDAO.h"
-#include "person.h"
 #include "client.h"
+#include "creattables.h"
+#include "database.h"
+#include "funofmenu.h"
+#include "item.h"
+#include "menu.h"
+#include "menuitemDAO.h"
+#include "order.h"
+#include "orderDAO.h"
+#include "person.h"
+#include "restaurant.h"
+#include "restaurantDAO.h"
 #include "restaurantmanager.h"
+#include "shoppingcart.h"
 #include "systemadmin.h"
+#include "userDAO.h"
+
 
 
 
