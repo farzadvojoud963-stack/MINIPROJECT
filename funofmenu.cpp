@@ -76,7 +76,6 @@ person *signupmenu(database &db)
         break;
     }
 
-
     int resid = -1;
 
     if (roll == "restaurant_manager")
@@ -98,9 +97,6 @@ person *signupmenu(database &db)
 
         resid = nres.getidres();
     }
-
-
-
 
     system("cls");
     cout << "your first name : \n";
@@ -376,28 +372,15 @@ void showclientmenu(database &db, client *cl)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void showmanagermenu(database &db, restaurantmanager *rm)
 {
     int choice = -1;
 
-    while (choice != 0)
-    {
+    while (true)
+    { 
         cout << "----------the manager menu--------------\n";
         cout << "enter the number your choosen option:\n";
-        cout << "1.view my restaurant informations \n2.edit restaurant information \n3.manag the menu \n4.view orders \n5.chang the status(you must know your order id) \n";
+        cout << "1.view my restaurant informations \n2.edit restaurant information \n3.manag the menu \n4.view orders \n5.chang the status of order(you must know your order id) \n";
 
         cin >> choice;
         system("cls");
@@ -405,6 +388,7 @@ void showmanagermenu(database &db, restaurantmanager *rm)
         {
             restaurantDAO res(db);
             restaurant *myres = res.findrestaurantbyid(rm->getresid());
+            cout << "----------- the restaurant information ------------\n";
             myres->showrestaurantinfo();
             system("pause");
             system("cls");
@@ -416,68 +400,338 @@ void showmanagermenu(database &db, restaurantmanager *rm)
 
             restaurant *myres = res.findrestaurantbyid(rm->getresid());
 
-            cout << "whit informatio of restaurant you want edit(enter the number of option for exit enter 0)\n";
-            cout << "1.edit address \n2.edit name \n3.edit phone number \n4.edit prep time\n";
-
             int editchoice;
-            cin >> editchoice;
 
-            system("cls");
-
-            if (editchoice == 1)
+            do
             {
-                cout << "enter new address\n";
-                string newaddress;
-                cin.ignore();
-                getline(cin, newaddress);
-                myres->setaddress(newaddress);
-                cout << "address changed successfully\n";
-                system("pause");
+                cout << "whit informatio of restaurant you want edit(enter the number of option for exit enter 0)\n";
+                cout << "1.edit address \n2.edit name \n3.edit phone number \n4.edit prep time\n (for return to manager menu enter 0)\n";
+
+                cin >> editchoice;
+
                 system("cls");
-                continue;
-            }else if(editchoice == 2){
-                cout << "enter new name\n";
-                string newname;
-                cin.ignore();
-                getline(cin, newname);
-                myres->setname(newname);
-                cout << "name changed successfully\n";
-                system("pause");
+
+                if (editchoice == 1)
+                {
+                    cout << "enter new address\n";
+                    string newaddress;
+                    cin.ignore();
+                    getline(cin, newaddress);
+                    myres->setaddress(newaddress);
+                    cout << "address changed successfully\n";
+                    system("pause");
+                    system("cls");
+                    continue;
+                }
+                else if (editchoice == 2)
+                {
+                    cout << "enter new name\n";
+                    string newname;
+                    cin.ignore();
+                    getline(cin, newname);
+                    myres->setname(newname);
+                    cout << "name changed successfully\n";
+                    system("pause");
+                    system("cls");
+                    continue;
+                }
+                else if (editchoice == 3)
+                {
+                    cout << "enter new phone number\n";
+                    string newphone;
+                    cin.ignore();
+                    getline(cin, newphone);
+                    myres->setphone(newphone);
+                    cout << "phone changed successfully\n";
+                    system("pause");
+                    system("cls");
+                    continue;
+                }
+                else if (editchoice == 4)
+                {
+                    cout << "enter your new prep time \n";
+                    int newprtime;
+                    cin >> newprtime;
+                    myres->setpreptime(newprtime);
+                    cout << "prep time changed successfully\n";
+                    system("pause");
+                    system("cls");
+                    continue;
+                }
+                else if (editchoice == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    cout << "the number you entered is wrong!!\n";
+                    system("pause");
+                    system("cls");
+                    continue;
+                }
+            } while (true);
+        }
+        else if (choice == 3)
+        {
+            int editmenuchoice = -1;
+            do
+            {
+                cout << "choose the blow option (enter the number each option\n)";
+                cout << "1.show menu \n2.add item to menu \n3.edit item of menu(you must know id of item) \n4.delete item from menu(you must know id of item) (for return to manger menu enter 0)\n";
+                cin >> editmenuchoice;
                 system("cls");
-                continue;
-            }else if(editchoice == 3){
-                cout << "enter new phone number\n";
-                string newphone;
-                cin.ignore();
-                getline(cin, newphone);
-                myres->setphone(newphone);
-                cout << "phone changed successfully\n";
-                system("pause");
-                system("cls");
-                continue;
+                if (editmenuchoice == 1)
+                {
+                    menuitemDAO resmenu(db);
+                    vector<item> mymenu = resmenu.finditemsbyres(rm->getresid());
+                    cout << "============= your menu ============\n";
+                    for (int i = 0; i < mymenu.size(); i++)
+                    {
+                        mymenu[i].showitem();
+                    }
+
+                    system("pause");
+                    system("cls");
+                    continue;
+                }
+                else if (editmenuchoice == 2)
+                {
+                    cout << "enter the type of item: (food or drink or other)\n";
+                    string type;
+                    cin >> type;
+                    system("cls");
+
+                    cout << "enter name item: \n";
+                    string name;
+                    cin.ignore();
+                    getline(cin, name);
+                    system("cls");
+
+                    cout << "enter description of item: \n";
+                    string description;
+                    cin.ignore();
+                    getline(cin, description);
+                    system("cls");
+
+                    int resid = rm->getresid();
+
+                    cout << "enter the baseprice of item: \n";
+                    float baseprice;
+                    cin >> baseprice;
+                    system("cls");
+
+                    cout << "enter the volume (for drink) or prep time based on minute (for food) and 0 for (others)\n";
+                    float detaile;
+                    cin >> detaile;
+                    system("cls");
+
+                    menuitemDAO resmenu(db);
+
+                    item resitem(type, name, description, resid, baseprice, detaile);
+
+                    if (resmenu.insertitem(resitem))
+                    {
+                        cout << "the item is added to your menu successfully!!\n";
+                        system("pause");
+                        system("cls");
+                        continue;
+                    }
+                    else
+                    {
+                        cout << "the item can't be added pleas try again!! \n";
+                        system("pause");
+                        system("cls");
+                        continue;
+                    }
+                }
+                else if (editmenuchoice == 3)
+                {
+                    cout << "enter the id of item: \n";
+                    int iditem;
+                    cin >> iditem;
+
+                    menuitemDAO nitem(db);
+                    item *myitem = nitem.finditembyid(iditem);
+
+                    if (myitem == nullptr)
+                    {
+                        cout << "the id of item is wrong!! try again\n";
+                        continue;
+                    }
+
+                    if (rm->getresid() != myitem->getresid())
+                    {
+                        cout << "the item with this id isn't in your menu!!\n";
+                        continue;
+                    }
+
+                    do
+                    {
+                        cout << "choose a option (enter the number of option):\n";
+                        cout << "1.edit name of menu \n2.edit description \n3.edit base price \n4.edit being availeble \n0.for return to edit menu \n";
+
+                        int editchoice;
+                        cin >> editchoice;
+
+                        if (editchoice == 1)
+                        {
+                            cout << "enter the new name:\n";
+                            string nname;
+                            cin.ignore();
+                            getline(cin, nname);
+
+                            myitem->setnameitem(nname);
+                            cout << "the name is changed successfully\n";
+                            system("pause");
+                            system("cls");
+                            continue;
+                        }
+                        else if (editchoice == 2)
+                        {
+                            cout << "enter the new description: \n";
+                            string ndescrip;
+                            cin.ignore();
+                            getline(cin, ndescrip);
+
+                            myitem->setdescriptionitem(ndescrip);
+                            cout << "the description is changed successfully\n";
+                            system("pause");
+                            system("cls");
+                            continue;
+                        }
+                        else if(editchoice == 3){
+                            cout << "enter the new base price:\n";
+                            float nbase;
+                            cin >> nbase;
+                            myitem->setbasepriceitem(nbase);
+                            
+                            
+                            cout << "the base price is changed successfully\n";
+                            system("pause");
+                            system("cls");
+                            continue;
+                        }else if(editchoice == 4){
+                            cout << "if you wanna active this item enter 1 and not enter 2\n";
+                            int a;
+                            cin >> a;
+                            if(a == 1){
+                                myitem->setisactive(true);
+                            }else{
+                                myitem->setisactive(false);
+                            }
+                            system("cls");
+                            
+                            cout << "the active is changed successfully!!\n";
+                            system("pause");
+                            system("cls");
+                            continue;   
+                        }else if(editchoice == 0){
+                            break;
+                        }else{
+                            cout << "the number you enterd is not availble!! try again\n";
+                            continue;
+                        }
+                    } while (true);
+                }else if(choice == 4){
+                    cout << "enter the id of item: \n";
+                    int iditem;
+                    cin >> iditem;
+
+                    menuitemDAO nitem(db);
+                    item *myitem = nitem.finditembyid(iditem);
+
+                    if (myitem == nullptr)
+                    {
+                        cout << "the id of item is wrong!! try again\n";
+                        continue;
+                    }
+
+                    if (rm->getresid() != myitem->getresid())
+                    {
+                        cout << "the item with this id isn't in your menu!!\n";
+                        continue;
+                    }
+                    
+                    if(nitem.deleteitem(iditem)){
+                        cout << "delete item is successfully\n";
+                    }else{
+                        cout << "delete item isn't successfully\n";
+                    }
+                    system("pause");
+                    system("cls");
+                    continue;  
+                }else if(choice == 0){
+                    break;
+                }else{
+                    cout << "the number that you enterd isn't availebl\n";
+                    system("pause");
+                    system("cls");
+                    continue;  
+                }
                 
-            }else if(editchoice == 4){
-                cout << "enter your new prep time \n";
-                int newprtime;
-                cin >> newprtime;
-                myres->setpreptime(newprtime);
-                cout << "prep time changed successfully\n";
+            } while (true);
+        }else if(choice == 4){
+            orderDAO resorder(db);
+            vector<order> myorders = resorder.findorderbyres(rm->getresid());
+            cout << "=========== your order ==============\n";
+            for (int i = 0 ; i < myorders.size(); i++){
+                myorders[i].showorder();
+            }
+            system("pause");
+            system("cls");
+            continue;  
+        }else if(choice == 5){
+            orderDAO resorder(db);
+            cout << "enter the id of order\n";
+            int idorder;
+            cin >> idorder;
+            system("cls");
+            
+            order* myorder = resorder.findorderbyid(idorder);
+            
+            if(myorder == nullptr){
+                cout << "the id of order is not availeble pleas try again!!\n"; 
                 system("pause");
                 system("cls");
                 continue;
-            }else{
-                cout << "the number you entered is wrong!!\n";
+
+            }else if(myorder->getresid() != rm->getresid()){
+                cout << "the order is not from this restaurant\n";
                 system("pause");
                 system("cls");
                 continue;
             }
-        }else if(choice == 3){
-            cout << "choos below option:\n";
-            cout << "1."
+            
+            cout << "enter the new status order('pending' or 'preparing' or 'ready_for_delivery' or 'delivered' your entire word must be like these words and their format)\n";
+            string nstatus;
+            cin >> nstatus;
+            system("cls");
+            
+            if(nstatus != "pending" && nstatus != "preparing" && nstatus != "ready_for_delivery" && nstatus != "delivered"){
+                cout << "the new status isn't like options please try again\n";
+                system("pause");
+                system("cls");
+                continue;   
+            }
+            
+            myorder->setstatus(nstatus);
+            cout << "the status of order is changed successfully!!\n";
+            system("pause");
+            system("cls");
+            continue;   
+        }else if(choice == 0){
+            cout << "good bye have a good day!!\n";
+            break;
+        }else{
+            cout << "the number you entered is not availeble!!\n";
+            system("pause");
+            system("cls");
+            continue;   
         }
     }
 }
 
 void showadminmenu(database &db, person *pr)
 {
+
 }
