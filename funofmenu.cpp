@@ -470,6 +470,8 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                     continue;
                 }
             } while (true);
+
+            res.updaterestaurant(*myres);
         }
         else if (choice == 3)
         {
@@ -632,6 +634,9 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                             continue;
                         }
                     } while (true);
+
+                    nitem.updateitem(*myitem);
+
                 }else if(choice == 4){
                     cout << "enter the id of item: \n";
                     int iditem;
@@ -714,7 +719,8 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                 continue;   
             }
             
-            myorder->setstatus(nstatus);
+            resorder.updateorderstatus(idorder, nstatus);
+            
             cout << "the status of order is changed successfully!!\n";
             system("pause");
             system("cls");
