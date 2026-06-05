@@ -43,5 +43,7 @@ class person{
         void setusername(string nusername);
         void setresid(int nresid);
         virtual ~person(){}
+
+        void showinfouser();
 };
 #endif

@@ -622,6 +622,8 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                                 myitem->setisactive(false);
                             }
                             system("cls");
+
+                            nitem.updateitem(*myitem);
                             
                             cout << "the active is changed successfully!!\n";
                             system("pause");
@@ -739,5 +741,110 @@ void showmanagermenu(database &db, restaurantmanager *rm)
 
 void showadminmenu(database &db, person *pr)
 {
+    int choice = -1;
 
+    do
+    {
+        cout << "choose an option (enter the number of option)\n";
+        cout << "1.show all restaurants \n2.active/disactive restaurant(you must have id of restaurant) \n3.view salse report \n4.view all users (enter 0 for exit)\n";
+        cin >> choice;
+        system("cls");
+
+        if(choice == 1){
+            restaurantDAO res(db);
+            vector<restaurant> ress = res.findallrestaurants();
+            cout << "========= the restaurants ===========\n";
+            for(int i = 0; i < ress.size(); i++){
+                ress[i].showrestaurantinfo();
+            }
+            system("pause");
+            system("cls");
+            continue;
+        }else if(choice == 2){
+            cout << "enter the id of restuant\n";
+            int resid;
+            cin >> resid;
+            system("cls");
+            restaurantDAO res(db);
+            restaurant* myres = res.findrestaurantbyid(resid);
+
+            cout << "for active enter 1 and not enter 2\n";
+            int a;
+            cin >> a;
+            if(a == 1){
+                myres->setisactive(true);
+            }else{
+                myres->setisactive(false);
+            }
+
+            res.updaterestaurant(*myres);
+            system("cls");
+
+            cout << "the restaurant active status is changed successfully\n";
+
+            system("pause");
+            system("cls");
+            continue;
+        }else if(choice == 3){
+            orderDAO norder(db);
+            restaurantDAO nres(db);
+            userDAO nuser(db);
+
+            vector<order> orders = norder.findallorders();
+            vector<person> users = nuser.findall();
+            vector<restaurant> ress = nres.findallrestaurants();
+
+            int numofres = ress.size();
+            int numofusers = users.size();
+            int numoforders = orders.size();
+
+            double totalprice = 0;
+
+            for(int i = 0; i < numoforders; i++){
+                totalprice += orders[i].gettotalprice();
+            }
+
+            int pend = 0, prep = 0, ready = 0, deliverd = 0;
+
+            for(int i = 0; i < numoforders; i++){
+                if(orders[i].getstatus() == "pending") pend++;
+                else if(orders[i].getstatus() == "preparing") prep++;
+                else if(orders[i].getstatus() == "ready_for_delivery") ready++;
+                else if(orders[i].getstatus() == "delivered") deliverd++;
+            }
+
+            cout << "========= salse report ============\n";
+            cout << "total salse (all orders): " << totalprice << " tomans\n";
+            cout << "-----------------------------------\n";
+            cout << "orders by status:\n";
+            cout << "-pending: " << pend << "orders\n-preparing: " << prep << "orders\n-ready for delivery: " << ready << "orders\n-delivered: " << deliverd << "orders\n";
+            cout << "-----------------------------------\n";
+            cout << "total orders: " << numoforders << "\ntotal users: " << numofusers << "\ntotal restaurants: " << numofres << endl;
+            cout << "===================================\n";
+            system("pause");
+            system("cls");
+            continue;
+        }else if(choice == 4){
+            userDAO user(db);
+            vector<person> users = user.findall();
+            cout << "============== the all users info ===================\n"
+            for(int i = 0; i < users.size(); i++){
+                users[i].showinfouser();
+            }
+            system("pause");
+            system("cls");
+            continue;
+        }else if(choice == 0){
+            cout << "good bye have a good day\n";
+            break;
+        }else{
+            cout << "the number you enterd is not availble try again\n";
+            system("pause");
+            system("cls");
+            continue;
+            
+        }
+
+    } while (true);
+    
 }

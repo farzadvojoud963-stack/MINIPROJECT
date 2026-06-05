@@ -72,3 +72,9 @@ void person::setusername(string nusername){
 void person::setresid(int nresid){
     resid = nresid;
 }
+
+
+
+void person::showinfouser(){
+    cout << "id : " << getid() << " ================ name : " << getfirstname() << " " << getlastname() << "role : " << getrole() << " the username and password : " << getusername() << " " << getpassword() << " the phone number : " << getphonnumber() << endl;
+}

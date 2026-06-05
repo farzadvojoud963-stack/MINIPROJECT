@@ -53,6 +53,11 @@ int order::getresid() const{
 }
 
 double order::gettotalprice() const{
+    double sum = 0;
+    for(int i = 0 ; i < items.size() ; i++){
+        sum += items[i].getbasepriceitem() * numofitems[i];
+    }
+    totalprice = sum;
     return totalprice;
 }
 
