@@ -1,0 +1,62 @@
+#ifndef ORDER_H
+#define ORDER_H
+
+#include <vector>
+using std::vector;
+
+#include <string>
+using std::string;
+
+#include "item.h"
+
+
+class order{
+    private:
+        int orderid;
+        int clientid;
+        int restaurantid;
+        vector<item> items;
+        vector<int> numofitems;
+        double totalprice;
+        string status;
+        string date;
+        bool issaved;
+    public:
+        order(int cliid=0, int resid=0){
+            clientid = cliid;
+            restaurantid = resid;
+            totalprice = 0 ;
+            status = "pending";
+            issaved = false;
+            orderid = -1;
+            date = "";
+
+        }
+        //setter
+        void setidorder(int nid);
+        void setstatus(string nstatus);
+        void settotalprice(double ntoprice);
+        void setdate(string ndate);
+        void setclientid(int ncliid);
+        void setrestaurantid(int nresid);
+        //getter
+        int getorderid();
+        string getstatus() const;
+        int getorderid() const;
+        int getclientid() const;
+        int getresid() const;
+        double gettotalprice() const;
+        string getdate() const;
+        const vector<item>& getitems() const;
+        const vector<int>& getnumofitems() const;
+        bool getissaved() const;
+
+
+        void additem(item nitem, int number);
+        void showorder();
+        void save();
+
+
+
+};
+#endif
