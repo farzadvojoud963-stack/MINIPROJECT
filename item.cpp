@@ -84,6 +84,7 @@ void item::setiditem(int nid){
 
 
 void item::showitem(){
+    cout << "id : " << iditem << endl;
     cout << "name : " << nameitem << endl;
     cout << "bace price : " << basepriceitem << endl;
     if(typeitem == "drink"){
@@ -94,7 +95,7 @@ void item::showitem(){
     cout << "the description is : " << descriptionitem << endl;
     cout << "situation :";
     if(isactive){
-        cout << " active\n\n";
+        cout << " active\n\n\n";
     }else{
         cout << " not active\n\n";
     }

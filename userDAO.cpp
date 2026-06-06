@@ -124,7 +124,7 @@ int userDAO::callbackfindbyusername(void* data, int argc, char** argv, char** az
 person* userDAO::findbyusername(string username){
     person* user = new person;
 
-    string query = "SELECT * FROM users WHERE username = " + username + ";";
+    string query = "SELECT * FROM users WHERE username = '" + username + "';";
 
     char* errmsg = nullptr;
 

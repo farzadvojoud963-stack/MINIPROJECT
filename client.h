@@ -19,9 +19,9 @@ class client : public person{
         vector<int> historyorders;
         int currentresid;
     public:
-        client(){};
+        client() : person() {}
         client(string nrole, string nfirstname, string nlastname, string nphonnumber,string nusername, string npassword) : person(nrole, nfirstname, nlastname, nphonnumber, nusername, npassword) , currentresid(-1){}
-        ~client(){};
+        ~client(){}
 
         const shoppingcart& getshoppingcart();
         const vector<int>& getorderhistory();

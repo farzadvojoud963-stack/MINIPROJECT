@@ -8,7 +8,7 @@ using std::string;
 class systemadmin : public person
 {
 public:
-    systemadmin(){}
+    systemadmin() : person() {}
     systemadmin(string nroll, string nfirstname, string nlastname, string nphonnumber, string nusername, string npassword)
     : person(nroll, nfirstname, nlastname, nphonnumber, nusername, npassword){}
     ~systemadmin(){}

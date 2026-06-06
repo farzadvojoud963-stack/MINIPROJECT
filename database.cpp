@@ -17,7 +17,6 @@ bool database::open(){
         std::cerr << sqlite3_errmsg(db) << std::endl;
         return false;
     }else{
-        std::cout << "the connection to data base is successfull!!\n\n";
         return true;
     }
 }
@@ -26,7 +25,6 @@ void database::close(){
     if(db != nullptr){
         sqlite3_close(db);
         db = nullptr;
-        std::cout << "the connection to data base is closed\n\n";
     }
 }
 
@@ -42,7 +40,6 @@ bool database::executequery(const string &query){
         sqlite3_free(errmsg);
         return false;
     }else{
-        std::cout << "the query is did successfully\n\n";
         return true;
     }
 

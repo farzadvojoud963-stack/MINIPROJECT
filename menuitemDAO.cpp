@@ -92,7 +92,7 @@ int menuitemDAO::callbackfindbyrestaurant(void* data, int argc, char** argv, cha
 
 vector<item> menuitemDAO::finditemsbyres(int resid){
     vector<item> items;
-    string query = "SELECT * FROM meun_items WHERE restaurant_id = " + std::to_string(resid) + ";";
+    string query = "SELECT * FROM menu_items WHERE restaurant_id = " + std::to_string(resid) + ";";
 
     char* errmsg = nullptr;
     int result = sqlite3_exec(db.getconnection(), query.c_str(), callbackfindbyrestaurant, &items, &errmsg);
@@ -113,7 +113,7 @@ bool menuitemDAO::deleteitem(int nid){
 
 
 bool menuitemDAO::insertitem(const item& nitem){
-    string query = "INSERT INTO menu_items (restaurant_id, name, description, base_price, type, is_active, volume, prep_time) VALUES ("
+    string query = "INSERT INTO menu_items (restaurant_id, name, description, base_price, type, is_active, volume, PREPTIME) VALUES ("
     + std::to_string(nitem.getresid()) + ", '"
     + nitem.getnameitem() + "', '"
     + nitem.getdescriptionitem() + "', "
@@ -135,8 +135,8 @@ bool menuitemDAO::updateitem(const item& item){
     "type = '" + item.gettypeitem() + "', "
     "is_active = " + std::to_string(item.getisactive()) + ", "
     "volume = " + std::to_string(item.getvolumitem()) + ", "
-    "prep_time = " + std::to_string(item.getpreptimeitem())
-    + "WHERE id = " + std::to_string(item.getiditem()) + ";";
+    "PREPTIME = " + std::to_string(item.getpreptimeitem())
+    + " WHERE id = " + std::to_string(item.getiditem()) + ";";
 
     return db.executequery(query);
 }

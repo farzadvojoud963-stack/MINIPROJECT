@@ -9,10 +9,10 @@ class restaurantmanager : public person
 {
 
 public:
-    restaurantmanager();
+    restaurantmanager() : person() {}
     restaurantmanager(string nrol , string nfname, string nlname, string phone, string nusername, string npass, int resid)
     : person(nrol , nfname, nlname, phone, nusername, npass){}
-    ~restaurantmanager();
+    ~restaurantmanager(){}
 
 };
 

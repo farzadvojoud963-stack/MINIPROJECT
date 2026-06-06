@@ -85,19 +85,12 @@ void order::save(){
 }
 
 void order::showorder(){
-    float sum = 0;
     cout << "===========factor=============\n";
     cout << "order id : " << orderid << endl;
     cout << "date : " << date << endl;
     cout << "status : " << status << endl;
-    cout << "------------------------\n";
-    for(int i = 0 ; i < items.size() ; i++){
-        cout << items[i].getnameitem() << " x" << numofitems[i] << " = " << items[i].getbasepriceitem() * numofitems[i] << endl;
-        sum += items[i].getbasepriceitem() * numofitems[i];
-    }
-    cout << "------------------------\n";
-    cout << "total base price is : " << sum << endl;
-    cout << "total price you must pay is : " << sum + sum * 0.1 << endl;
+    cout << "total base price is : " << totalprice << endl;
+    cout << "total price you must pay is : " << totalprice + (totalprice * 0.1) << endl;
     cout << "==============================\n\n";
 }
 
