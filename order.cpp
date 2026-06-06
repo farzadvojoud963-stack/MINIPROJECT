@@ -52,12 +52,12 @@ int order::getresid() const{
     return restaurantid;
 }
 
-double order::gettotalprice() const{
+double order::gettotalprice(){
     double sum = 0;
     for(int i = 0 ; i < items.size() ; i++){
         sum += items[i].getbasepriceitem() * numofitems[i];
     }
-    totalprice = sum;
+    settotalprice(sum);
     return totalprice;
 }
 

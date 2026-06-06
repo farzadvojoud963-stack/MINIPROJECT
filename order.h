@@ -45,7 +45,7 @@ class order{
         int getorderid() const;
         int getclientid() const;
         int getresid() const;
-        double gettotalprice() const;
+        double gettotalprice();
         string getdate() const;
         const vector<item>& getitems() const;
         const vector<int>& getnumofitems() const;

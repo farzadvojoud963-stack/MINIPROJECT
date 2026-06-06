@@ -14,7 +14,7 @@ using std::string;
 
 int firstmenu()
 {
-    cout << "are you signed in? if yes enter 1 and no enter 2 (for exit from program enter 0):\n";
+    cout << "are you signed up? if yes enter 1 and no enter 2 (for exit from program enter 0):\n";
     int c = -1;
     while (c != 1 && c != 2 && c != 0)
     {
@@ -739,7 +739,7 @@ void showmanagermenu(database &db, restaurantmanager *rm)
     }
 }
 
-void showadminmenu(database &db, person *pr)
+void showadminmenu(database &db, systemadmin* sa)
 {
     int choice = -1;
 

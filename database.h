@@ -1,6 +1,7 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
+#include "creattables.h"
 #include "sqlite3.h"
 #include <string>
 using std::string;

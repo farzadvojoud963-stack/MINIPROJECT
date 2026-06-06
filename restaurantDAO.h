@@ -19,7 +19,7 @@ private:
 
 
 public:
-    restaurantDAO(database& ndb);
+    restaurantDAO(database& ndb) : db(ndb){}
 
     bool insertrestaurant(const restaurant& nres);
     bool updaterestaurant(const restaurant& nres);

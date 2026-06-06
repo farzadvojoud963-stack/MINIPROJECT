@@ -11,7 +11,7 @@ const string createuser = R"(
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      username TEXT UNIQUE NOT NULL, 
      password TEXT NOT NULL,
-     role TEXT CHECH(role IN ('client', 'restaurant_manager', 'system_admin')) NOT NULL,
+     role TEXT CHECK(role IN ('client', 'restaurant_manager', 'system_admin')) NOT NULL,
      first_name TEXT NOT NULL,
      last_name TEXT NOT NULL,
      phone TEXT NOT NULL,
@@ -37,8 +37,8 @@ const string createmenuitems = R"(
      restaurant_id INTEGER NOT NULL,
      name TEXT NOT NULL,
      description TEXT NOT NULL,
-     bace_price REAL NOT NULL,
-     type TEXT CHECK(item_type IN('drink', 'food', 'other')) NOT NULL,
+     base_price REAL NOT NULL,
+     type TEXT CHECK(type IN('drink', 'food', 'other')) NOT NULL,
      is_active INTEGER DEFAULT 1,
      volume REAL DEFAULT 0,
      PREPTIME REAL DEFAULT 0,
@@ -47,20 +47,20 @@ const string createmenuitems = R"(
 )";
 
 const string createorders = R"(
-    CREAT TABLE IF NOT EXISTS orders(
+    CREATE TABLE IF NOT EXISTS orders(
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      client_id INTEGER NOT NULL,
      restaurant_id INTEGER NOT NULL,
      order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
      total_price REAL NOT NULL,
-     status TEXT CHECK(status IN('pending', 'preparing', ready_for_delivery', 'delivered')) DEFAULT 'pending',
+     status TEXT CHECK(status IN('pending', 'preparing', 'ready_for_delivery', 'delivered')) DEFAULT 'pending',
      FOREIGN KEY(client_id) REFERENCES users(id),
      FOREIGN KEY(restaurant_id) REFERENCES restaurants(id)
     );
 )";
 
 const string createorderitems = R"(
-    CREAT TABLE IF NOT EXISTS order_items(
+    CREATE TABLE IF NOT EXISTS order_items(
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      order_id INTEGER NOT NULL,
      menu_item_id INTEGER NOT NULL,

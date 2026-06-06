@@ -1,9 +1,10 @@
 #include <iostream>
 #include "database.h"
-#include "creattables.h"
+
 
 database::database(string ndbname) : dbname(ndbname) , db(nullptr) {
     open();
+    creattables();
 }
 
 database::~database(){
@@ -16,7 +17,7 @@ bool database::open(){
         std::cerr << sqlite3_errmsg(db) << std::endl;
         return false;
     }else{
-        std::cout << "the connection to is successfull!!\n\n";
+        std::cout << "the connection to data base is successfull!!\n\n";
         return true;
     }
 }
@@ -48,11 +49,11 @@ bool database::executequery(const string &query){
 }
 
 void database::creattables(){
+    executequery(createuser);
     executequery(createrestaurants);
     executequery(createmenuitems);
-    executequery(createorderitems);
     executequery(createorders);
-    executequery(createuser);
+    executequery(createorderitems);
 }
 
 int database::getlastinsetrowid(){
