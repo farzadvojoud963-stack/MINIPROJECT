@@ -17,7 +17,7 @@ class order{
         int restaurantid;
         vector<item> items;
         vector<int> numofitems;
-        double totalprice;
+        float totalprice;
         string status;
         string date;
         bool issaved;
@@ -35,7 +35,7 @@ class order{
         //setter
         void setidorder(int nid);
         void setstatus(string nstatus);
-        void settotalprice(double ntoprice);
+        void settotalprice(float ntoprice);
         void setdate(string ndate);
         void setclientid(int ncliid);
         void setrestaurantid(int nresid);
@@ -45,7 +45,8 @@ class order{
         int getorderid() const;
         int getclientid() const;
         int getresid() const;
-        double gettotalprice();
+        float gettotalpriceafterDAO();
+        float gettotalprice();
         string getdate() const;
         const vector<item>& getitems() const;
         const vector<int>& getnumofitems() const;

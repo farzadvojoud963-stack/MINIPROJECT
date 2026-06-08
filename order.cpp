@@ -27,7 +27,7 @@ void order::setrestaurantid(int nresid){
     restaurantid = nresid;
 }
 
-void order::settotalprice(double ntoprice){
+void order::settotalprice(float ntoprice){
     totalprice = ntoprice;
 }
 
@@ -52,8 +52,12 @@ int order::getresid() const{
     return restaurantid;
 }
 
-double order::gettotalprice(){
-    double sum = 0;
+float order::gettotalpriceafterDAO(){
+    return totalprice;
+}
+
+float order::gettotalprice(){
+    float sum = 0;
     for(int i = 0 ; i < items.size() ; i++){
         sum += items[i].getbasepriceitem() * numofitems[i];
     }

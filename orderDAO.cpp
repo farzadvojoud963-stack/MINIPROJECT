@@ -9,7 +9,7 @@ int orderDAO::callbackfindall(void* data, int argc, char** argv, char** azcolnam
     ord.setclientid(atoi(argv[1]));
     ord.setrestaurantid(atoi(argv[2]));
     ord.setdate(argv[3]);
-    ord.settotalprice(std::stod(argv[4]));
+    ord.settotalprice(atof(argv[4]));
     ord.setstatus(argv[5]);
 
     orders->push_back(ord);

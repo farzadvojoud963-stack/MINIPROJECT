@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <iostream>
 #include <cstdlib>
+#include <iomanip>
 
 using std::cin;
 using std::cout;
@@ -95,7 +96,7 @@ person *signupmenu(database &db)
             exit(0);
         }
 
-        resid = nres.getidres();
+        resid = res.getsastinsertid();
     }
 
     system("cls");
@@ -281,28 +282,35 @@ void showclientmenu(database &db, client *cl)
         }
         else if (choice == 4)
         {
-            cout << "enter the id of item: \n";
-            int iditem;
-            cin >> iditem;
-
-            cout << "how many you want: \n";
-            int num;
-            cin >> num;
-
-            menuitemDAO menu(db);
-            item *menuitem = menu.finditembyid(iditem);
-
-            if (menuitem == nullptr)
+            if (cl->getcurrentresid() == -1)
             {
-                cout << "item not found\n";
-                system("pause");
-                system("cls");
-                continue;
+                cout << "pleas at first choose the current restaurant id\n";
             }
+            else
+            {
+                cout << "enter the id of item: \n";
+                int iditem;
+                cin >> iditem;
 
-            cl->addtocart(*menuitem, num);
+                cout << "how many you want: \n";
+                int num;
+                cin >> num;
 
-            cout << "the item is added to shopping cart\n";
+                menuitemDAO menu(db);
+                item *menuitem = menu.finditembyid(iditem);
+
+                if (menuitem == nullptr)
+                {
+                    cout << "item not found\n";
+                    system("pause");
+                    system("cls");
+                    continue;
+                }
+
+                cl->addtocart(*menuitem, num);
+
+                cout << "the item is added to shopping cart\n";
+            }
             system("pause");
             system("cls");
             continue;
@@ -365,7 +373,6 @@ void showclientmenu(database &db, client *cl)
                 {
                     allorder[i].showorder();
                 }
-
             }
             system("pause");
             system("cls");
@@ -512,9 +519,35 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                 }
                 else if (editmenuchoice == 2)
                 {
-                    cout << "enter the type of item: (food or drink or other)\n";
+                    cout << "enter the num of type of item: (1.food  or 2.drink or 3.other)\n";
                     string type;
-                    cin >> type;
+                    int typenum;
+                    cin >> typenum;
+                    
+                    while (true)
+                    {
+                        if (typenum == 1)
+                        {
+                            type = "food";
+                            break;
+                        }
+                        else if (typenum == 2)
+                        {
+                            type = "drink";
+                            break;
+                        }
+                        else if (typenum == 3)
+                        {
+                            type = "other";
+                            break;
+                        }
+                        else
+                        {
+                            cout << "the entire number is not availble\n";
+                        }
+                        cin >> typenum;
+                    }
+
                     system("cls");
 
                     cout << "enter name item: \n";
@@ -576,7 +609,7 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                         system("cls");
                         continue;
                     }
-                    
+
                     if (rm->getresid() != myitem->getresid())
                     {
                         cout << "the item with this id isn't in your menu!!\n";
@@ -656,7 +689,7 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                         else if (editchoice == 0)
                         {
                             system("cls");
-                            
+
                             break;
                         }
                         else
@@ -665,7 +698,6 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                             system("pause");
                             system("cls");
                             continue;
-                            
                         }
                     } while (true);
 
@@ -687,7 +719,7 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                         system("cls");
                         continue;
                     }
-                    
+
                     if (rm->getresid() != myitem->getresid())
                     {
                         cout << "the item with this id isn't in your menu!!\n";
@@ -856,6 +888,7 @@ void showadminmenu(database &db, systemadmin *sa)
             orderDAO norder(db);
             restaurantDAO nres(db);
             userDAO nuser(db);
+            menuitemDAO menuitem(db);
 
             vector<order> orders = norder.findallorders();
             vector<person> users = nuser.findall();
@@ -865,11 +898,11 @@ void showadminmenu(database &db, systemadmin *sa)
             int numofusers = users.size();
             int numoforders = orders.size();
 
-            double totalprice = 0;
+            float totalprice = 0;
 
             for (int i = 0; i < numoforders; i++)
             {
-                totalprice += orders[i].gettotalprice();
+                totalprice += orders[i].gettotalpriceafterDAO();
             }
 
             int pend = 0, prep = 0, ready = 0, deliverd = 0;
@@ -887,7 +920,8 @@ void showadminmenu(database &db, systemadmin *sa)
             }
 
             cout << "========= salse report ============\n";
-            cout << "total salse (all orders): " << totalprice << " tomans\n";
+            cout << "total salse (all orders): " << std::fixed << std::setprecision(0) << totalprice << " tomans\n";
+            cout << std::defaultfloat;
             cout << "-----------------------------------\n";
             cout << "orders by status:\n";
             cout << "-pending: " << pend << " orders\n-preparing: " << prep << " orders\n-ready for delivery: " << ready << " orders\n-delivered: " << deliverd << " orders\n";
