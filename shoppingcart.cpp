@@ -2,6 +2,8 @@
 #include <string>
 #include "shoppingcart.h"
 #include "item.h"
+#include <iomanip>
+
 
 
 using std::cout;
@@ -45,7 +47,8 @@ void shoppingcart::display() const{
         cout << cartitems[i].getnameitem() << " x"<< numberofitems[i] <<" the price for per item: " << cartitems[i].getbasepriceitem() << endl;
     }
 
-    cout << "the total price is : " << gettotal() << endl << endl;
+    cout << "the total price is : " << std::fixed << std::setprecision(0) << gettotal() << endl << endl;
+    cout << std::defaultfloat;
 }
 
 void shoppingcart::clear(){
