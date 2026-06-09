@@ -22,11 +22,11 @@ class userDAO{
         vector<person> findall();
         vector<person> findbyroll(string role);
         
+        private:
         static int callbackfindbyid(void* data, int argc, char** argv, char** azcolname);
         static int callbackfindbyusername(void* data, int argc, char** argv, char** azcolname);
         static int callbackfindall(void* data, int argc, char** argv, char** azcolname);
         static int callbackfindbyrole(void* data, int argc, char** argv, char** azcolname);
-    private:
         database &db;
 };
 #endif
