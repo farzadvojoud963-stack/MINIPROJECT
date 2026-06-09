@@ -23,6 +23,7 @@ int menuitemDAO::callbackfindall(void* data, int argc, char** argv, char** azcol
     return 0;
 }
 
+
 vector<item> menuitemDAO::findallitems(){
     string query = "SELECT * FROM menu_items;";
 

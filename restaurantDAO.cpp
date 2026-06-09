@@ -152,6 +152,5 @@ int restaurantDAO::getsastinsertid(){
         sqlite3_free(errmsg);
     }
 
-
     return lastid;
 }

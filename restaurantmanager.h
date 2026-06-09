@@ -7,7 +7,6 @@ using std::string;
 
 class restaurantmanager : public person
 {
-
 public:
     restaurantmanager() : person() {}
     restaurantmanager(string nrol , string nfname, string nlname, string phone, string nusername, string npass, int resid)

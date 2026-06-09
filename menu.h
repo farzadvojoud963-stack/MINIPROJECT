@@ -11,7 +11,6 @@ class menu{
         vector<item> items;
     public:
         menu(){
-
         }
         void additem(string ntypeitem="", string nnameitem="", string ndescriptionitem="", float nbacepriceitem=0, float detaile=0, bool nisactive=true);
         void removeitemname(string nnameitem);

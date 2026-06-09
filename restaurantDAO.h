@@ -27,8 +27,7 @@ public:
     restaurant* findrestaurantbyid(int id);
     vector<restaurant> findallrestaurants();
     vector<restaurant> findactiverestaurants();
-    int getsastinsertid();
-    
+    int getsastinsertid(); 
 };
 
 

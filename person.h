@@ -15,6 +15,7 @@ class person{
         string role;
         int resid;
     public:
+    
         person(string nrole="", string nfirstname="", string nlastname="", string nphonnumber="",string nusername="", string npassword="", int nresid=-1 ,  int nid = -1 ){
             setfirstname(nfirstname);
             setlastname(nlastname);

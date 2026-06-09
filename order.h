@@ -31,6 +31,7 @@ class order{
             orderid = -1;
             date = "";
 
+            
         }
         //setter
         void setidorder(int nid);

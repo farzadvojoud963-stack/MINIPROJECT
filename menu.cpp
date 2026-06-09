@@ -37,6 +37,7 @@ void menu::removeitemid(int nid){
         cout << "the menu is empty\n\n";
         return;
     }
+    
     int flag = 1;
     for(int i = 0; flag && i < items.size(); i++){
         if(nid == items[i].getiditem()){

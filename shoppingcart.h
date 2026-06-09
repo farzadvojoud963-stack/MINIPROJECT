@@ -10,6 +10,7 @@ class shoppingcart{
     private:
         vector<item> cartitems;
         vector<int> numberofitems;
+        
     public:
         void add(item nitem, int nnumber);
         void remove(int itemid);

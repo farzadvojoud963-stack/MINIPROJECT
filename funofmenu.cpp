@@ -918,6 +918,7 @@ void showadminmenu(database &db, systemadmin *sa)
                 else if (orders[i].getstatus() == "delivered")
                     deliverd++;
             }
+            
 
             cout << "========= salse report ============\n";
             cout << "total salse (all orders): " << std::fixed << std::setprecision(0) << totalprice << " tomans\n";

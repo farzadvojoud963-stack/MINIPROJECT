@@ -15,6 +15,7 @@ int orderDAO::callbackfindall(void* data, int argc, char** argv, char** azcolnam
     orders->push_back(ord);
 
     return 0;
+    
 }
 
 vector<order> orderDAO::findallorders(){

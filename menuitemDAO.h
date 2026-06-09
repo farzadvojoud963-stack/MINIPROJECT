@@ -15,6 +15,7 @@ class menuitemDAO{
         static int callbackfindbyid(void* data, int argc, char** argv, char** azcolname);
         static int callbackfindbyrestaurant(void* data, int argc, char** argv, char** azcolname);
 
+        
     public:
         menuitemDAO(database& ndb) : db(ndb){}
 

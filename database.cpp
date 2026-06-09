@@ -28,6 +28,7 @@ void database::close(){
     }
 }
 
+
 sqlite3 * database::getconnection(){
     return db;
 }

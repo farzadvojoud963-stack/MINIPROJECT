@@ -13,7 +13,6 @@ using std::vector;
 class userDAO{
     public:
         userDAO(database& ndb) : db(ndb){}
-
         bool insertuser(const person &user);
         bool updateuser(const person &user);
         bool removebyid(int d);

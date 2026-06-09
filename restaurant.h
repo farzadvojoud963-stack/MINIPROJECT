@@ -21,6 +21,7 @@ class restaurant{
         bool isActive;
         string address;
         menu resmenu;
+        
     public:
         restaurant(string nname="", string nphon="", string naddress="", string ndescription=""){
             setname(nname);

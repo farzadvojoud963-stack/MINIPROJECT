@@ -174,7 +174,6 @@ vector<person> userDAO::findbyroll(string role){
         std::cerr << "error in find by role : " << errmsg << std::endl;
         sqlite3_free(errmsg);
     }
-
     return users;
 }
 

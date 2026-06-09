@@ -15,6 +15,7 @@ class item{
         float volumitem;
         float preptimeitem;
         int resid;
+        
     public:
         item(string ntypeitem="", string nnameitem="", string ndescriptionitem="", int nresid=-1,  float nbacepriceitem=0, float detaile=0 , bool nisactive=true , int niditem=-1){
             settypeitem(ntypeitem);

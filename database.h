@@ -21,4 +21,5 @@ class database{
         int getlastinsetrowid();
 
 };
+
 #endif
