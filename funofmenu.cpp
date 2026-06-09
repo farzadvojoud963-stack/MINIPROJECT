@@ -836,7 +836,7 @@ void showadminmenu(database &db, systemadmin *sa)
     do
     {
         cout << "choose an option (enter the number of option)\n";
-        cout << "1.show all restaurants \n2.active/disactive restaurant(you must have id of restaurant) \n3.view salse report \n4.view all users (enter 0 for exit)\n";
+        cout << "1.show all restaurants \n2.active/disactive restaurant(you must have id of restaurant) \n3.view salse report \n4.view all users\n5.delete a user  (enter 0 for exit)\n";
         cin >> choice;
         system("cls");
 
@@ -918,7 +918,7 @@ void showadminmenu(database &db, systemadmin *sa)
                 else if (orders[i].getstatus() == "delivered")
                     deliverd++;
             }
-            
+
 
             cout << "========= salse report ============\n";
             cout << "total salse (all orders): " << std::fixed << std::setprecision(0) << totalprice << " tomans\n";
@@ -941,6 +941,26 @@ void showadminmenu(database &db, systemadmin *sa)
             for (int i = 0; i < users.size(); i++)
             {
                 users[i].showinfouser();
+            }
+            system("pause");
+            system("cls");
+            continue;
+        }else if(choice == 5){
+            userDAO user(db);
+            int userid;
+            cout << "enter the id of user\n";
+            cin >> userid;
+            system("cls");
+            person* pr = user.findbyid(userid);
+            if(pr == nullptr){
+                cout << "the user isn't found\n";
+            }else{
+                if(user.removebyid(userid)){
+                    cout << "the user removed successfully\n";
+                }else{
+                    cout << "the user not removed successfully try later\n";
+                    
+                }
             }
             system("pause");
             system("cls");
