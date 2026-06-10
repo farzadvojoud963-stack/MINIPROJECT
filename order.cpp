@@ -1,7 +1,7 @@
 #include <iostream>
 using std::cout;
 using std::endl;
-
+#include <iomanip>
 #include <string> 
 using std::string;
 
@@ -94,8 +94,10 @@ void order::showorder(){
     cout << "order id : " << orderid << endl;
     cout << "date : " << date << endl;
     cout << "status : " << status << endl;
-    cout << "total base price is : " << totalprice << endl;
-    cout << "total price you must pay is : " << totalprice + (totalprice * 0.1) << endl;
+    cout << "total base price is : " << std::fixed << std::setprecision(0) << totalprice << endl;
+    cout << std::defaultfloat;
+    cout << "total price you must pay is : " << std::fixed << std::setprecision(0) << totalprice + (totalprice * 0.1) << endl;
+    cout << std::defaultfloat;
     cout << "==============================\n\n";
 }
 

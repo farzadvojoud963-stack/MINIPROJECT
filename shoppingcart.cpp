@@ -44,7 +44,8 @@ double shoppingcart::gettotal() const{
 
 void shoppingcart::display() const{
     for(int i = 0 ; i < cartitems.size() ; i++){
-        cout << cartitems[i].getnameitem() << " x"<< numberofitems[i] <<" the price for per item: " << cartitems[i].getbasepriceitem() << endl;
+        cout << cartitems[i].getnameitem() << " x"<< numberofitems[i] <<" the price for per item: " << std::fixed << std::setprecision(0) << cartitems[i].getbasepriceitem() << endl;
+        cout << std::defaultfloat;
     }
 
     cout << "the total price is : " << std::fixed << std::setprecision(0) << gettotal() << endl << endl;
