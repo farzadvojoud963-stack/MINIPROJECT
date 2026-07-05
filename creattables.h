@@ -15,6 +15,8 @@ const string createuser = R"(
      first_name TEXT NOT NULL,
      last_name TEXT NOT NULL,
      phone TEXT NOT NULL,
+     level TEXT DEFAULT 'normal',
+     points INTEGER DEFAULT 0,
      restaurant_id INTEGER DEFAULT -1
     );
 )";
@@ -68,6 +70,31 @@ const string createorderitems = R"(
      total_price REAL NOT NULL,
      FOREIGN KEY(menu_item_id) REFERENCES menu_items(id),
      FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE
+    );
+)";
+
+
+
+const string createpointhistory = R"(
+    CREATE TABLE IF NOT EXISTS point_history(
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     user_id INTEGER NOT NULL,
+     points_change INTEGER NOT NULL,
+     reason TEXT CHECK(reason IN ('order', 'admin', 'cancel')) DEFAULT 'order',
+     created_at DATETIME NOT DEFAULT
+     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
+)";
+
+const string creatmemberhistory = R"(
+    CREATE TABLE IF NOT EXISTS membership_history(
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     user_id INTEGER NOT NULL,
+     old_level TEXT CHECK(old_level IN('normal', 'silver', 'gold', 'vip')) DEFAULT 'normal',
+     new_level TEXT CHECK(new_level IN('normal', 'silver', 'gold', 'vip')) DEFAULT 'normal',
+     changed_at DATETIME NOT NULL,
+     changed_by TEXT CHECK(changed_by IN('admin', 'system')) DEFAULT 'system'
+     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASECADE
     );
 )";
 

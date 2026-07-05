@@ -52,6 +52,8 @@ void database::creattables(){
     executequery(createmenuitems);
     executequery(createorders);
     executequery(createorderitems);
+    executequery(createpointhistory);
+    executequery(creatmemberhistory);
 }
 
 int database::getlastinsetrowid(){
