@@ -97,6 +97,22 @@ void person::setlevelptr(membershiplevel* nlevelptr){
     levelptr = nlevelptr;
 }
 
+void person::setlevelptrbylevel(){
+    if(level == "normal"){
+        normal* n = new normal;
+        setlevelptr(n);
+    }else if(level == "silver"){
+        silver* s = new silver;
+        setlevelptr(s);
+    }else if(level == "gold"){
+        gold* g = new gold;
+        setlevelptr(g);
+    }else if(level == "vip"){
+        vip* v = new vip;
+        setlevelptr(v);
+    }
+}
+
 
 
 void person::showinfouser(){

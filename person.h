@@ -5,6 +5,9 @@
 using std::string;
 #include "membershiplevel.h"
 #include "vipmember.h"
+#include "normalmember.h"
+#include "silvermember.h"
+#include "goldmember.h"
 
 class person{
     private:
@@ -33,7 +36,7 @@ class person{
             setlevel(nlevel);
             setpoints(npoints);
             levelptr = nullptr;
-            
+
         }
         //getter
         string getfirstname() const;
@@ -59,6 +62,7 @@ class person{
         void setlevel(string nlevel);
         void setpoints(int npoints);
         void setlevelptr(membershiplevel* nlevelptr);
+        void setlevelptrbylevel();
         virtual ~person(){}
 
         void showinfouser();
