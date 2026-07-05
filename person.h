@@ -4,6 +4,7 @@
 #include <string>
 using std::string;
 #include "membershiplevel.h"
+#include "vipmember.h"
 
 class person{
     private:
@@ -20,7 +21,7 @@ class person{
         membershiplevel* levelptr;
     public:
     
-        person(string nrole="", string nfirstname="", string nlastname="", string nphonnumber="",string nusername="", string npassword="", int nresid=-1 ,  int nid = -1 ){
+        person(string nrole="", string nfirstname="", string nlastname="", string nphonnumber="",string nusername="", string npassword="", int nresid=-1 ,  int nid = -1 , string nlevel = "normal", int npoints = 0){
             setfirstname(nfirstname);
             setlastname(nlastname);
             setpassword(npassword);
@@ -29,6 +30,9 @@ class person{
             setid(nid);
             setresid(nresid);
             setusername(nusername);
+            setlevel(nlevel);
+            setpoints(npoints);
+            levelptr = nullptr;
         }
         //getter
         string getfirstname() const;
