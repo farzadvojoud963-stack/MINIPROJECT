@@ -13,6 +13,7 @@ class membershiplevel{
         virtual string getshipstatus() const = 0;
         virtual int getnextlevelmin() const = 0;
         virtual membershiplevel* getnextlevelptr() = 0;
+        virtual float getshoppingcost() const = 0;
         virtual ~membershiplevel() = 0;
 };
 

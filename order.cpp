@@ -6,6 +6,7 @@ using std::endl;
 using std::string;
 
 #include "order.h"
+#include "userDAO.h"
 
 void order::setidorder(int nid){
     orderid = nid;
@@ -89,14 +90,22 @@ void order::save(){
     issaved = true;
 }
 
-void order::showorder(){
+void order::showorder(database& db){
+    userDAO dao(db);
+    person* p = dao.findbyid(clientid);
+    float disc = (p->getlevelptr()->getdis() / 100) * totalprice;
+    float shcost = p->getlevelptr()->getshoppingcost();
+
     cout << "===========factor=============\n";
     cout << "order id : " << orderid << endl;
     cout << "date : " << date << endl;
     cout << "status : " << status << endl;
     cout << "total base price is : " << std::fixed << std::setprecision(0) << totalprice << endl;
+    cout << "Discount (" << p->getlevelptr()->getdis() << "%) : -" << disc << endl;
+    cout << "shopping const : +" << shcost << endl;
+    cout << "the total prices (without VAT) is: " << totalprice - disc + shcost << endl;
     cout << std::defaultfloat;
-    cout << "total price you must pay is : " << std::fixed << std::setprecision(0) << totalprice + (totalprice * 0.1) << endl;
+    cout << "total price you must pay (with VAT (10%)) : " << std::fixed << std::setprecision(0) << totalprice + (totalprice * 0.1) << endl;
     cout << std::defaultfloat;
     cout << "==============================\n\n";
 }

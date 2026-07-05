@@ -8,6 +8,8 @@ using std::vector;
 using std::string;
 
 #include "item.h"
+#include "database.h"
+
 
 
 class order{
@@ -55,7 +57,7 @@ class order{
 
 
         void additem(item nitem, int number);
-        void showorder();
+        void showorder(database& db);
         void save();
 
 

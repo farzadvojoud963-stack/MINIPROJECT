@@ -13,6 +13,7 @@ class gold : public membershiplevel{
         string getshipstatus() const {return "half";}
         int getnextlevelmin() const {return 700;}
         membershiplevel* getnextlevelptr(){ return new vip;}
+        float getshoppingcost() const {return 5000.0;}
         ~gold() {}
 };
 

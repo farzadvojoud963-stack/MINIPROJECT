@@ -51,13 +51,5 @@ float manager::applydiscount(float total, membershiplevel* level){
 }
 
 float manager::getshippingcost(membershiplevel* level){
-    string status = level->getshipstatus();
-    if(status == "free"){
-        return 0.0;
-    }else if(status == "half"){
-        return 15000.0;
-    }else{
-        return 30000.0;
-    }
-
+    level->getshoppingcost();
 }

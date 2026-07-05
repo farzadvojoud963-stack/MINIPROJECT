@@ -5,6 +5,7 @@ using std::endl;
 using std::string;
 
 #include "item.h"
+#include <iomanip>
 
 
 string item::getnameitem() const{
@@ -86,7 +87,7 @@ void item::setiditem(int nid){
 void item::showitem(){
     cout << "id : " << iditem << endl;
     cout << "name : " << nameitem << endl;
-    cout << "bace price : " << basepriceitem << endl;
+    cout << "bace price : " << std::fixed << std::setprecision(0) <<basepriceitem << std::defaultfloat << endl;
     if(typeitem == "drink"){
         cout << "the volum : " << volumitem << " liter\n";
     }else{

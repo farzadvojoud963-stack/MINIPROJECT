@@ -3,6 +3,7 @@
 
 #include <string>
 using std::string;
+#include "membershiplevel.h"
 
 class person{
     private:
@@ -14,6 +15,9 @@ class person{
         string phonnumber;
         string role;
         int resid;
+        string level;
+        int points;
+        membershiplevel* levelptr;
     public:
     
         person(string nrole="", string nfirstname="", string nlastname="", string nphonnumber="",string nusername="", string npassword="", int nresid=-1 ,  int nid = -1 ){
@@ -35,6 +39,9 @@ class person{
         int getid() const;
         string getusername() const;
         int getresid() const;
+        string getlevel() const;
+        int getpoints() const;
+        membershiplevel* getlevelptr() const;
         //setter
         void setfirstname(string nfirstname);
         void setlastname(string nlastname);
@@ -44,6 +51,9 @@ class person{
         void setid(int nid);
         void setusername(string nusername);
         void setresid(int nresid);
+        void setlevel(string nlevel);
+        void setpoints(int npoints);
+        void setlevelptr(membershiplevel* nlevelptr);
         virtual ~person(){}
 
         void showinfouser();

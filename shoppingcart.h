@@ -5,6 +5,7 @@
 #include "item.h"
 #include <vector>
 using std::vector;
+#include "database.h"
 
 class shoppingcart{
     private:
@@ -15,7 +16,7 @@ class shoppingcart{
         void add(item nitem, int nnumber);
         void remove(int itemid);
         double gettotal() const;
-        void display() const;
+        void display(int cliid, database& db) const;
         void clear();
         vector<item> getcartitems() const;
         vector<int> getnumberofitems() const;

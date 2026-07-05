@@ -5,13 +5,15 @@ using std::vector;
 
 
 bool userDAO::insertuser(const person &user){
-    string query = "INSERT INTO users (username, password, role ,first_name, last_name, phone, restaurant_id) VALUES('"
+    string query = "INSERT INTO users (username, password, role ,first_name, last_name, phone, level, points, restaurant_id) VALUES('"
     + user.getusername() + "','"
     + user.getpassword() + "','"
     + user.getrole() + "','"
     + user.getfirstname() + "','"
     + user.getlastname() + "','"
-    + user.getphonnumber() + "', "
+    + user.getphonnumber() + "', '"
+    + user.getlevel() + "', "
+    + std::to_string(user.getpoints()) + ", "
     + std::to_string(user.getresid()) + ");";
 
     return db.executequery(query);
@@ -25,8 +27,10 @@ bool userDAO::updateuser(const person& user){
     "first_name = '" + user.getfirstname() + "', "
     "last_name = '" + user.getlastname() + "', "
     "phone = '" + user.getphonnumber() + "', "
+    "level = '" + user.getlevel() + "', "
+    "points = " + std::to_string(user.getpoints()) + ", "
     "restaurant_id = " + std::to_string(user.getresid())
-    + "WHERE id = " + std::to_string(user.getid()) + ";";
+    + " WHERE id = " + std::to_string(user.getid()) + ";";
 
     return db.executequery(query);
 }
@@ -36,40 +40,7 @@ bool userDAO::removebyid(int id){
     return db.executequery(query);
 }
 
-// int userDAO::callbackfindall(void* data, int argc, char** argv, char** azcolname){
-//     vector<person>* users = (vector<person>*)data;
 
-//     person p;
-//     p.setid(atoi(argv[0]));
-//     p.setusername(argv[1]);
-//     p.setpassword(argv[2]);
-//     p.setrole(argv[3]);
-//     p.setfirstname(argv[4]);
-//     p.setlastname(argv[5]);
-//     p.setphonnumber(argv[6]);
-//     p.setresid(atoi(argv[7]));
-
-//     users->push_back(p);
-
-//     return 0;
-// }
-
-// vector<person> userDAO::findall(){
-//     vector<person> users;
-
-//     string query = "SELECT * FROM users;";
-
-//     char* errmsg = nullptr;
-//     int result = sqlite3_exec(db.getconnection(),query.c_str(), callbackfindall, &users, &errmsg);
-
-//     if(result != SQLITE_OK){
-//         std::cerr << "error in find all : " << errmsg << std::endl;
-//         sqlite3_free(errmsg);
-//     }
-
-//     return users;
-    
-// }
 
 int userDAO::callbackfindbyid(void* data, int argc, char** argv, char** azcolname){
     person * user = (person *)data;
@@ -81,7 +52,9 @@ int userDAO::callbackfindbyid(void* data, int argc, char** argv, char** azcolnam
     user->setfirstname(argv[4]);
     user->setlastname(argv[5]);
     user->setphonnumber(argv[6]);
-    user->setresid(atoi(argv[7]));
+    user->setlevel(argv[7]);
+    user->setpoints(atoi(argv[8]));
+    user->setresid(atoi(argv[9]));
 
     return 0;
 }
@@ -116,7 +89,9 @@ int userDAO::callbackfindbyusername(void* data, int argc, char** argv, char** az
     user->setfirstname(argv[4]);
     user->setlastname(argv[5]);
     user->setphonnumber(argv[6]);
-    user->setresid(atoi(argv[7]));
+    user->setlevel(argv[7]);
+    user->setpoints(atoi(argv[8]));
+    user->setresid(atoi(argv[9]));
 
     return 0;
 }
@@ -156,16 +131,18 @@ int userDAO::callbackfindbyrole(void* data, int argc, char** argv, char** azcoln
     p.setfirstname(argv[4]);
     p.setlastname(argv[5]);
     p.setphonnumber(argv[6]);
-    p.setresid(atoi(argv[7]));
-
+    p.setlevel(argv[7]);
+    p.setpoints(atoi(argv[8]));
+    p.setresid(atoi(argv[9]));
+    
     users->push_back(p);
-
+    
     return 0;
 }
 
 vector<person> userDAO::findbyroll(string role){
     vector<person> users;
-    string query = "SELECT * FROM users WHERE role = " + role + ";";
+    string query = "SELECT * FROM users WHERE role = '" + role + "';";
     char* errmsg = nullptr;
     int result;
     result = sqlite3_exec(db.getconnection(), query.c_str(), callbackfindbyrole, &users, &errmsg);
@@ -187,7 +164,9 @@ int userDAO::callbackfindall(void* data, int argc, char** argv, char** azcolname
     p.setfirstname(argv[4]);
     p.setlastname(argv[5]);
     p.setphonnumber(argv[6]);
-    p.setresid(atoi(argv[7]));
+    p.setlevel(argv[7]);
+    p.setpoints(atoi(argv[8]));
+    p.setresid(atoi(argv[9]));
     
     users->push_back(p);
     return 0;

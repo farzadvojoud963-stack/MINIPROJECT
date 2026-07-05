@@ -39,6 +39,17 @@ string person::getusername() const{
     return username;
 }
 
+string person::getlevel() const{
+    return level;
+}
+
+int person::getpoints() const{
+    return points;
+}
+
+membershiplevel* person::getlevelptr() const{
+    return levelptr;
+}
 
 
 
@@ -72,6 +83,18 @@ void person::setusername(string nusername){
 
 void person::setresid(int nresid){
     resid = nresid;
+}
+
+void person::setlevel(string nlevel){
+    level = nlevel;
+}
+
+void person::setpoints(int npoints){
+    points = npoints;
+}
+
+void person::setlevelptr(membershiplevel* nlevelptr){
+    levelptr = nlevelptr;
 }
 
 

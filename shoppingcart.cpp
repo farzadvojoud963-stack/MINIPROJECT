@@ -3,6 +3,8 @@
 #include "shoppingcart.h"
 #include "item.h"
 #include <iomanip>
+#include "userDAO.h"
+#include "person.h"
 
 
 
@@ -42,14 +44,22 @@ double shoppingcart::gettotal() const{
     return total;
 }
 
-void shoppingcart::display() const{
+void shoppingcart::display(int cliid, database& db) const{
+    userDAO dao(db);
+
+    person* p = dao.findbyid(cliid);
+
     for(int i = 0 ; i < cartitems.size() ; i++){
         cout << cartitems[i].getnameitem() << " x"<< numberofitems[i] <<" the price for per item: " << std::fixed << std::setprecision(0) << cartitems[i].getbasepriceitem() << endl;
         cout << std::defaultfloat;
     }
-
-    cout << "the total price is : " << std::fixed << std::setprecision(0) << gettotal() << endl << endl;
-    cout << std::defaultfloat;
+    float disc = (p->getlevelptr()->getdis() / 100) * gettotal();
+    float shcost = p->getlevelptr()->getshoppingcost();
+    cout << "the total base price is : " << std::fixed << std::setprecision(0) << gettotal() << endl << endl;
+    cout << "Discount (" << p->getlevelptr()->getdis() << "%) : -" << disc << endl;
+    cout << "shopping const : +" << shcost << endl;
+    cout << "============================\n";
+    cout << "the total prices that you must pay is : " << gettotal() - disc + shcost << endl << endl; 
 }
 
 void shoppingcart::clear(){

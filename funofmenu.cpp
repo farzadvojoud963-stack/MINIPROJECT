@@ -318,7 +318,7 @@ void showclientmenu(database &db, client *cl)
         else if (choice == 5)
         {
             cout << "-----------the shopping cart------------\n";
-            cl->getshoppingcart().display();
+            cl->getshoppingcart().display(cl->getid(), db);
             system("pause");
             system("cls");
             continue;
@@ -371,7 +371,7 @@ void showclientmenu(database &db, client *cl)
                 cout << "+++++++++++++the history orders+++++++++++\n\n";
                 for (int i = 0; i < allorder.size(); i++)
                 {
-                    allorder[i].showorder();
+                    allorder[i].showorder(db);
                 }
             }
             system("pause");
@@ -762,7 +762,7 @@ void showmanagermenu(database &db, restaurantmanager *rm)
             cout << "=========== your order ==============\n";
             for (int i = 0; i < myorders.size(); i++)
             {
-                myorders[i].showorder();
+                myorders[i].showorder(db);
             }
             system("pause");
             system("cls");

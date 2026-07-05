@@ -12,6 +12,7 @@ class vip : public membershiplevel{
         string getshipstatus() const {return "free";}
         int getnextlevelmin() const {return -1;}
         membershiplevel* getnextlevelptr() {return new vip;}
+        float getshoppingcost() const {return 0.0;}
         ~vip() {}
 };
 
