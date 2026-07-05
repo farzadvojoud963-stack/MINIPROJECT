@@ -33,6 +33,7 @@ class person{
             setlevel(nlevel);
             setpoints(npoints);
             levelptr = nullptr;
+            
         }
         //getter
         string getfirstname() const;
