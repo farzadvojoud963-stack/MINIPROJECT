@@ -30,7 +30,7 @@ using std::string;
 
 int main()
 {
-    database db("restaurant.db");
+    database db("restaurantmanager.db");
 
     int choice = firstmenu();
 
@@ -130,10 +130,13 @@ int main()
             person *pr = signupmenu(db);
             if (pr != nullptr)
             {
+                cout << "1\n";
                 string rol = pr->getrole();
                 if (rol == "client")
                 {
+                    cout << "2\n";
                     client *cl = dynamic_cast<client *>(pr);
+                    cout << "3\n";
                     showclientmenu(db, cl);
                 }
                 else

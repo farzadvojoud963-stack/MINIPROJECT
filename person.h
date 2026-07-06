@@ -26,7 +26,7 @@ class person{
         string badge;
     public:
     
-        person(string nrole="", string nfirstname="", string nlastname="", string nphonnumber="",string nusername="", string npassword="", int nresid=-1 ,  int nid = -1 , string nlevel = "normal", int npoints = 0, int nmc = 0, string nbadge){
+        person(string nrole="", string nfirstname="", string nlastname="", string nphonnumber="",string nusername="", string npassword="", int nresid=-1 ,  int nid = -1 , string nlevel = "normal", int npoints = 0, int nmc = 0, string nbadge = ""){
             setfirstname(nfirstname);
             setlastname(nlastname);
             setpassword(npassword);

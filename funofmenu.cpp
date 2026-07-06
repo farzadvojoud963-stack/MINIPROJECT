@@ -204,31 +204,35 @@ person *signinmenu(database &db)
 
 void showclientmenu(database &db, client *cl)
 {
+    cout << "4\n";
     system("cls");
     int choice = -1;
-
+    cout << "44\n";
+    int cliid = cl->getid();
     manager mg(db);
     userDAO dao(db);
-
-    int cliid = cl->getid();
-
+    cout << "5\n";
+    
+    
+    cout << "6\n";
     while (choice != 0)
     {
-        person *p = dao.findbyid(cliid);
+        cout << "7\n";
+        // person *p = dao.findbyid(cliid);
 
-        cl->setfirstname(p->getfirstname());
-        cl->setid(p->getid());
-        cl->setlastname(p->getlastname());
-        cl->setpassword(p->getpassword());
-        cl->setphonnumber(p->getphonnumber());
-        cl->setresid(p->getresid());
-        cl->setrole(p->getrole());
-        cl->setusername(p->getusername());
-        cl->setcurrentresid(-1);
-        cl->setlevel(p->getlevel());
-        cl->setlevelptrbylevel();
-        cl->setmcoins(p->getmcoins());
-        cl->setbadge(p->getbadge());
+        // cl->setfirstname(p->getfirstname());
+        // cl->setid(p->getid());
+        // cl->setlastname(p->getlastname());
+        // cl->setpassword(p->getpassword());
+        // cl->setphonnumber(p->getphonnumber());
+        // cl->setresid(p->getresid());
+        // cl->setrole(p->getrole());
+        // cl->setusername(p->getusername());
+        // cl->setcurrentresid(-1);
+        // cl->setlevel(p->getlevel());
+        // cl->setlevelptrbylevel();
+        // cl->setmcoins(p->getmcoins());
+        // cl->setbadge(p->getbadge());
 
         cout << "**************the client menu***************\n\n";
         cout << "your badge is: " << cl->getbadge() << " | your point is: " << cl->getpoints() << " | your level is: " << cl->getlevel() << " | number of your coins is : " << cl->getmcoins() << endl

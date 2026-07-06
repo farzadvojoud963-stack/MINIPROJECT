@@ -96,8 +96,8 @@ const string creatmemberhistory = R"(
      old_level TEXT CHECK(old_level IN('normal', 'silver', 'gold', 'vip')) DEFAULT 'normal',
      new_level TEXT CHECK(new_level IN('normal', 'silver', 'gold', 'vip')) DEFAULT 'normal',
      changed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-     changed_by TEXT CHECK(changed_by IN('admin', 'system')) DEFAULT 'system'
-     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASECADE
+     changed_by TEXT CHECK(changed_by IN('admin', 'system')) DEFAULT 'system',
+     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 )";
 

@@ -41,9 +41,9 @@ bool manager::checkandupgrade(int id, membershiplevel*& level, string reason){
 bool manager::changelevelbyadmin(int id, string newlevel){
     string oldlevel = dao.getuserlevel(id);
     dao.updateuserlevel(id, newlevel);
-    string newlevel = dao.getuserlevel(id);
+    string nlevel = dao.getuserlevel(id);
 
-    return dao.addmembershiphistory(id, oldlevel, newlevel, "admin");
+    return dao.addmembershiphistory(id, oldlevel, nlevel, "admin");
 }
 
 float manager::applydiscount(float total, membershiplevel* level){
@@ -52,7 +52,7 @@ float manager::applydiscount(float total, membershiplevel* level){
 }
 
 float manager::getshippingcost(membershiplevel* level){
-    level->getshoppingcost();
+    return level->getshoppingcost();
 }
 
 void manager::assignusercoins(int id){

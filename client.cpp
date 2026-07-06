@@ -33,10 +33,6 @@ void client::addtocart(item nitem, int number){
     cart.add(nitem, number);
 }
 
-void client::viewcart(){
-    cart.display();
-}
-
 void client::removeanitem(int itemid){
     cart.remove(itemid);
 }

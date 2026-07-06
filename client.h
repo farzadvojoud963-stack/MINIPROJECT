@@ -32,7 +32,7 @@ class client : public person{
         void clearcart();
         void addtocart(item nitem, int number);
         void removeanitem(int itemid);
-        void viewcart();
+        
 
 };
 #endif
