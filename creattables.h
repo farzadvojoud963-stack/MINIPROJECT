@@ -18,6 +18,7 @@ const string createuser = R"(
      level TEXT DEFAULT 'normal',
      points INTEGER DEFAULT 0,
      monthly_coins INTEGER DEFAULT 0,
+     badge TEXT DEFAULT '',
      restaurant_id INTEGER DEFAULT -1
     );
 )";
@@ -81,8 +82,9 @@ const string createpointhistory = R"(
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      user_id INTEGER NOT NULL,
      points_change INTEGER NOT NULL,
-     reason TEXT CHECK(reason IN ('order', 'admin', 'cancel')) DEFAULT 'order',
-     created_at DATETIME NOT DEFAULT
+     reason TEXT DEFAULT 'order',
+     type TEXT CHECK(type IN('point', 'coin')) DEFAULT 'point',
+     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 )";
@@ -93,7 +95,7 @@ const string creatmemberhistory = R"(
      user_id INTEGER NOT NULL,
      old_level TEXT CHECK(old_level IN('normal', 'silver', 'gold', 'vip')) DEFAULT 'normal',
      new_level TEXT CHECK(new_level IN('normal', 'silver', 'gold', 'vip')) DEFAULT 'normal',
-     changed_at DATETIME NOT NULL,
+     changed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      changed_by TEXT CHECK(changed_by IN('admin', 'system')) DEFAULT 'system'
      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASECADE
     );

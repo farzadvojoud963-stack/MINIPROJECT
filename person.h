@@ -22,9 +22,11 @@ class person{
         string level;
         int points;
         membershiplevel* levelptr;
+        int monthlycoins;
+        string badge;
     public:
     
-        person(string nrole="", string nfirstname="", string nlastname="", string nphonnumber="",string nusername="", string npassword="", int nresid=-1 ,  int nid = -1 , string nlevel = "normal", int npoints = 0){
+        person(string nrole="", string nfirstname="", string nlastname="", string nphonnumber="",string nusername="", string npassword="", int nresid=-1 ,  int nid = -1 , string nlevel = "normal", int npoints = 0, int nmc = 0, string nbadge){
             setfirstname(nfirstname);
             setlastname(nlastname);
             setpassword(npassword);
@@ -36,7 +38,8 @@ class person{
             setlevel(nlevel);
             setpoints(npoints);
             levelptr = nullptr;
-
+            setmcoins(nmc);
+            setbadge(nbadge);
         }
         //getter
         string getfirstname() const;
@@ -50,6 +53,8 @@ class person{
         string getlevel() const;
         int getpoints() const;
         membershiplevel*& getlevelptr();
+        int getmcoins() const;
+        string getbadge() const;
         //setter
         void setfirstname(string nfirstname);
         void setlastname(string nlastname);
@@ -63,6 +68,10 @@ class person{
         void setpoints(int npoints);
         void setlevelptr(membershiplevel* nlevelptr);
         void setlevelptrbylevel();
+        void setmcoins(int nmcoins);
+        void setbadge(string newbadge);
+
+
         virtual ~person(){}
 
         void showinfouser();

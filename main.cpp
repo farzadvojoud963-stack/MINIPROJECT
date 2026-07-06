@@ -49,10 +49,12 @@ int main()
                 cl->setcurrentresid(-1);
                 cl->setlevel(pr->getlevel());
                 cl->setlevelptrbylevel();
-
+                cl->setmcoins(pr->getmcoins());
+                cl->setbadge(pr->getbadge());
+                
                 if (cl != nullptr)
                 {
-
+                    
                     showclientmenu(db, cl);
                 }
                 delete cl;
@@ -73,6 +75,8 @@ int main()
                     rm->setusername(pr->getusername());
                     rm->setlevel("normal");
                     rm->setlevelptr(nullptr);
+                    rm->setmcoins(0);
+                    rm->setbadge("");
 
                     if (rm != nullptr)
                     {
@@ -97,6 +101,8 @@ int main()
                         sa->setusername(pr->getusername());
                         sa->setlevel("normal");
                         sa->setlevelptr(nullptr);
+                        sa->setmcoins(0);
+                        sa->setbadge("");
 
                         if (sa != nullptr)
                         {

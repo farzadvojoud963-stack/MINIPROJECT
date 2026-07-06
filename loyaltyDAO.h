@@ -40,18 +40,26 @@ class loyaltyDAO{
         static int callbackpointhistory(void* data, int argc, char** argv, char** azColName);
         static int callbackmembershiphistory(void* data, int argc, char** argv, char** azColName);
         static int callbackcountusers(void* data, int argc, char** argv, char** azColName);
-
+        static int callbackusercoins(void* data, int argc, char** argv, char** azColName);
+        static int callbackgetuserbadge(void* data, int argc, char** argv, char** azColName);
+        static int callbackgetcountorder(void* data, int argc, char** argv, char** azColName);
     public:
         loyaltyDAO(database& ndb) : db(ndb){}
         string getuserlevel(int id);
         int getuserpoints(int id);
         bool updateuserpoint(int id, int points);
         bool updateuserlevel(int id, string level);
-        bool addpointhistory(int id, int points, string reason);
+        bool addpointhistory(int id, int points, string reason, string type);
         bool addmembershiphistory(int id, string olevel, string nlevel, string changedby);
         vector<pointhistory> getpointhistory(int id);
         vector<memberhistory> getmembershiphistory(int id);
         int countuserbylevel(const string& level);
+        int getusercoins(int id);
+        bool updateusercoins(int id, int ncoins);
+        string getuserbadge(int id);
+        bool updateuserbadge(int id, string nbadge);
+        int getordercount(int id);
+
 };
 
 #endif

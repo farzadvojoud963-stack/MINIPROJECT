@@ -51,6 +51,14 @@ membershiplevel*& person::getlevelptr(){
     return levelptr;
 }
 
+int person::getmcoins() const{
+    return monthlycoins;
+}
+
+string person::getbadge() const{
+    return badge;
+}
+
 
 
 void person::setfirstname(string nfirstname){
@@ -115,11 +123,19 @@ void person::setlevelptrbylevel(){
     }
 }
 
+void person::setmcoins(int nmcoins){
+    monthlycoins = nmcoins;
+}
+
+void person::setbadge(string newbadge){
+    badge = newbadge;
+}
+
 
 
 void person::showinfouser(){
     cout << "id : " << getid() << " ================ name : " << getfirstname() << " " << getlastname() << " / role : " << getrole() << " / the username and password : " << getusername() << " " << getpassword() << " / the phone number : " << getphonnumber() << endl;
     if(role == "client"){
-        cout << "the level of client is: " << level << "  / the points of client is: " << points << endl << endl;
+        cout << "the level of client is: " << level << "  / the points of client is: " << points << "  / the badge is : ( " << badge << " )" << endl << endl;
     }
 }

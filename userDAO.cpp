@@ -5,7 +5,7 @@ using std::vector;
 
 
 bool userDAO::insertuser(const person &user){
-    string query = "INSERT INTO users (username, password, role ,first_name, last_name, phone, level, points, restaurant_id) VALUES('"
+    string query = "INSERT INTO users (username, password, role ,first_name, last_name, phone, level, points, monthly_coins, badge, restaurant_id) VALUES('"
     + user.getusername() + "','"
     + user.getpassword() + "','"
     + user.getrole() + "','"
@@ -14,6 +14,8 @@ bool userDAO::insertuser(const person &user){
     + user.getphonnumber() + "', '"
     + user.getlevel() + "', "
     + std::to_string(user.getpoints()) + ", "
+    + std::to_string(user.getmcoins()) + ", '"
+    + user.getbadge() + "', "
     + std::to_string(user.getresid()) + ");";
 
     return db.executequery(query);
@@ -29,6 +31,8 @@ bool userDAO::updateuser(const person& user){
     "phone = '" + user.getphonnumber() + "', "
     "level = '" + user.getlevel() + "', "
     "points = " + std::to_string(user.getpoints()) + ", "
+    "monthly_coins = " + std::to_string(user.getmcoins()) + ", "
+    "badge = '" + user.getbadge() + "', "
     "restaurant_id = " + std::to_string(user.getresid())
     + " WHERE id = " + std::to_string(user.getid()) + ";";
 
@@ -54,34 +58,36 @@ int userDAO::callbackfindbyid(void* data, int argc, char** argv, char** azcolnam
     user->setphonnumber(argv[6]);
     user->setlevel(argv[7]);
     user->setpoints(atoi(argv[8]));
-    user->setresid(atoi(argv[9]));
-
+    user->setmcoins(atoi(argv[9]));
+    user->setbadge(argv[10]);
+    user->setresid(atoi(argv[11]));
+    
     return 0;
 }
 
 person* userDAO::findbyid(int id){
     person* user = new person;
-
+    
     string query = "SELECT * FROM users WHERE id = " + std::to_string(id) + ";";
-
+    
     char* errmsg = nullptr;
     int result;
-
+    
     result = sqlite3_exec(db.getconnection(), query.c_str(), callbackfindbyid, user, &errmsg);
-
+    
     if(result != SQLITE_OK){
         std::cerr << "error in find user by id : " << errmsg << std::endl;
         sqlite3_free(errmsg);
         delete user;
     }
-
+    
     return user;
     
 }
 
 int userDAO::callbackfindbyusername(void* data, int argc, char** argv, char** azcolname){
     person* user = (person*) data;
-
+    
     user->setid(atoi(argv[0]));
     user->setusername(argv[1]);
     user->setpassword(argv[2]);
@@ -91,38 +97,40 @@ int userDAO::callbackfindbyusername(void* data, int argc, char** argv, char** az
     user->setphonnumber(argv[6]);
     user->setlevel(argv[7]);
     user->setpoints(atoi(argv[8]));
-    user->setresid(atoi(argv[9]));
-
+    user->setmcoins(atoi(argv[9]));
+    user->setbadge(argv[10]);
+    user->setresid(atoi(argv[11]));
+    
     return 0;
 }
 
 person* userDAO::findbyusername(string username){
     person* user = new person;
-
+    
     string query = "SELECT * FROM users WHERE username = '" + username + "';";
-
+    
     char* errmsg = nullptr;
-
+    
     int result = sqlite3_exec(db.getconnection(), query.c_str(), callbackfindbyusername, user, &errmsg);
-
+    
     if(result != SQLITE_OK){
         std::cerr << "error in find by username : " << errmsg << std::endl;
         sqlite3_free(errmsg);
         delete user;
         return nullptr;
     }
-
+    
     if(user->getid() == -1){
         delete user;
         return nullptr;
     }
-
+    
     return user;
 }
 
 int userDAO::callbackfindbyrole(void* data, int argc, char** argv, char** azcolname){
     vector<person>* users = (vector<person>*) data;
-
+    
     person p;
     p.setid(atoi(argv[0]));
     p.setusername(argv[1]);
@@ -133,7 +141,9 @@ int userDAO::callbackfindbyrole(void* data, int argc, char** argv, char** azcoln
     p.setphonnumber(argv[6]);
     p.setlevel(argv[7]);
     p.setpoints(atoi(argv[8]));
-    p.setresid(atoi(argv[9]));
+    p.setmcoins(atoi(argv[9]));
+    p.setbadge(argv[10]);
+    p.setresid(atoi(argv[11]));
     
     users->push_back(p);
     
@@ -146,7 +156,7 @@ vector<person> userDAO::findbyroll(string role){
     char* errmsg = nullptr;
     int result;
     result = sqlite3_exec(db.getconnection(), query.c_str(), callbackfindbyrole, &users, &errmsg);
-
+    
     if(result != SQLITE_OK){
         std::cerr << "error in find by role : " << errmsg << std::endl;
         sqlite3_free(errmsg);
@@ -166,7 +176,9 @@ int userDAO::callbackfindall(void* data, int argc, char** argv, char** azcolname
     p.setphonnumber(argv[6]);
     p.setlevel(argv[7]);
     p.setpoints(atoi(argv[8]));
-    p.setresid(atoi(argv[9]));
+    p.setmcoins(atoi(argv[9]));
+    p.setbadge(argv[10]);
+    p.setresid(atoi(argv[11]));
     
     users->push_back(p);
     return 0;

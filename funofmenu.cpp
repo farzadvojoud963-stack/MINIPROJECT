@@ -208,10 +208,31 @@ void showclientmenu(database &db, client *cl)
     int choice = -1;
 
     manager mg(db);
+    userDAO dao(db);
+
+    int cliid = cl->getid();
 
     while (choice != 0)
     {
-        cout << "**************the client menu***************\n";
+        person *p = dao.findbyid(cliid);
+
+        cl->setfirstname(p->getfirstname());
+        cl->setid(p->getid());
+        cl->setlastname(p->getlastname());
+        cl->setpassword(p->getpassword());
+        cl->setphonnumber(p->getphonnumber());
+        cl->setresid(p->getresid());
+        cl->setrole(p->getrole());
+        cl->setusername(p->getusername());
+        cl->setcurrentresid(-1);
+        cl->setlevel(p->getlevel());
+        cl->setlevelptrbylevel();
+        cl->setmcoins(p->getmcoins());
+        cl->setbadge(p->getbadge());
+
+        cout << "**************the client menu***************\n\n";
+        cout << "your badge is: " << cl->getbadge() << " | your point is: " << cl->getpoints() << " | your level is: " << cl->getlevel() << " | number of your coins is : " << cl->getmcoins() << endl
+             << endl;
         cout << "enter the number of option you want(for exit inter 0)\n";
         cout << "1.show all active restaurants \n2.choose restaurant \n3.show current restaurant menu \n4.add item to shopping cart \n5.show shopping cart \n6.check out order \n7.show history of orders\n\n";
 
@@ -338,30 +359,87 @@ void showclientmenu(database &db, client *cl)
 
             if (flag)
             {
-                
 
+                cout << "if you wanna use your coins enter 1 (if not enter 0)\n";
+                int coinchoise;
+                cin >> coinchoise;
 
                 order norder = cl->getshoppingcart().toorder(cl->getid(), cl->getcurrentresid(), db);
                 orderDAO orders(db);
+
+                if (coinchoise != 1 && coinchoise != 0)
+                {
+                    cout << "the entire number isn't availble please try again\n";
+                    system("pause");
+                    system("cls");
+                    continue;
+                }
+                system("cls");
+
+                if (coinchoise)
+                {
+                    int availblecoins = cl->getmcoins();
+                    if (availblecoins <= 0)
+                    {
+                        cout << "you don't have any coins!! please try again for check out\n";
+                        system("pause");
+                        system("cls");
+                        continue;
+                    }
+                    cout << "How many coins you wanna use (if you enter more than your coins we conseder the max coins you have mean " + std::to_string(cl->getmcoins()) + " coins )\n";
+                    int requestcoin;
+                    cin >> requestcoin;
+                    if (requestcoin > availblecoins)
+                    {
+                        requestcoin = availblecoins;
+                    }
+
+                    float maxdiscount = norder.gettotalprice();
+                    float requestdiscount = requestcoin * 10000;
+
+                    int coinsused = requestcoin;
+                    if (requestdiscount > maxdiscount)
+                    {
+                        coinsused = maxdiscount / 10000;
+                    }
+
+                    float realdiscount = coinsused * 10000;
+                    int coinssaved = requestcoin - coinsused;
+
+                    norder.settotalprice(norder.gettotalprice() - realdiscount);
+
+                    mg.usecoins(cl->getid(), coinsused);
+
+                    cout << "your discount is done with your coins (the number of coins used is: " << coinsused << " )\n\n";
+
+                    if (coinssaved > 0)
+                    {
+                        mg.addcoins(cl->getid(), coinssaved);
+                        cout << "your extra coins is returned to your account\n\n";
+                    }
+                }
+
                 if (orders.insertorder(norder))
                 {
                     cout << "your order is registered successfully!!\n\n";
 
-                    if (!mg.addpoints(cl->getid(), cl->getshoppingcart().gettotal(), cl->getlevelptr(), "order"))
+                    
+                    if (!mg.addpoints(cl->getid(), cl->getshoppingcart().gettotal(), cl->getlevelptr(), "order", "point"))
                     {
                         cout << "error in add point\n";
                         system("pause");
                         system("cls");
                         continue;
                     }
-
+                    
                     if (mg.checkandupgrade(cl->getid(), cl->getlevelptr(), "system"))
                     {
                         std::cout << "your level upgraded. your new level is: " << cl->getlevelptr()->getlevelname() << endl;
                     }
+                    
+                    mg.checkbadge(cl->getid());
 
-                    cl->setpoints(mg.calculatepoints(cl->getshoppingcart().gettotal(), cl->getlevelptr()) + cl->getpoints());
-                    cl->setlevel(cl->getlevelptr()->getlevelname());
+                    
                     cl->clearcart();
                 }
                 else
@@ -858,7 +936,7 @@ void showadminmenu(database &db, systemadmin *sa)
     do
     {
         cout << "choose an option (enter the number of option)\n";
-        cout << "1.show all restaurants \n2.active/disactive restaurant(you must have id of restaurant) \n3.view salse report \n4.view all users\n5.delete a user\n6.change level of a client  (enter 0 for exit)\n";
+        cout << "1.show all restaurants \n2.active/disactive restaurant(you must have id of restaurant) \n3.view salse report \n4.view all users\n5.delete a user\n6.change level of a client \n7.assign coins to all clients  (enter 0 for exit)\n";
         cin >> choice;
         system("cls");
 
@@ -1064,6 +1142,23 @@ void showadminmenu(database &db, systemadmin *sa)
             {
                 cout << "the entire number isn't availble please try again\n\n";
             }
+            system("pause");
+            system("cls");
+            continue;
+        }
+        else if (choice == 7)
+        {
+            manager mg(db);
+            userDAO dao(db);
+
+            vector<person> p = dao.findall();
+
+            for (int i = 0; i < p.size(); i++)
+            {
+                mg.assignusercoins(p[i].getid());
+            }
+
+            cout << "the coins is assigned to clients.\n\n";
             system("pause");
             system("cls");
             continue;

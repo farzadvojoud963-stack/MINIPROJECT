@@ -106,7 +106,7 @@ int loyaltyDAO::callbackmembershiphistory(void* data, int argc, char** argv, cha
 vector<memberhistory> loyaltyDAO::getmembershiphistory(int id){
     vector<memberhistory> memberhistory;
 
-    string query = "SELECT * FROM membership_history WHERE user_id = " + std::to_string(id) + " ORDERD BY changed_at DESC;";
+    string query = "SELECT * FROM membership_history WHERE user_id = " + std::to_string(id) + " ORDER BY changed_at DESC;";
 
     char* errmsg = nullptr;
 
@@ -156,9 +156,9 @@ bool loyaltyDAO::updateuserlevel(int id, string level){
     return db.executequery(query); 
 }
 
-bool loyaltyDAO::addpointhistory(int id, int pointchang, string reason){
-    string query = "INSERT INTO point_history(user_id, points_change, reason, created_at) VALUES ("
-    + std::to_string(id) + ", " + std::to_string(pointchang) + ", '" + reason + "', datetime('now'));";
+bool loyaltyDAO::addpointhistory(int id, int pointchang, string reason, string type){
+    string query = "INSERT INTO point_history(user_id, points_change, reason, type, created_at) VALUES ("
+    + std::to_string(id) + ", " + std::to_string(pointchang) + ", '" + reason + "', '" + type + "', datetime('now'));";
     return db.executequery(query);  
 }
 
@@ -166,4 +166,116 @@ bool loyaltyDAO::addmembershiphistory(int id, string olevel, string nlevel, stri
     string query = "INSERT INTO membership_history (user_id, old_level, new_level, changed_at, changed_by) VALUES ("
     + std::to_string(id) + ", '" + olevel + "', '" + nlevel + "', datetime('now'), '" + changedby + "');";
     return db.executequery(query);  
+}
+
+
+int loyaltyDAO::callbackusercoins(void* data, int argc, char** argv, char** azColName){
+    int* result = (int*)data;
+
+    if(argc > 0 && argv[0]){
+        *result = atoi(argv[0]);
+    }
+
+    return 0;
+}
+
+int loyaltyDAO::getusercoins(int id){
+    int coins = 0;
+    string query = "SELECT monthly_coins FROM users WHERE id = " + std::to_string(id) + ";";
+    char* errmsg = nullptr;
+    int result =sqlite3_exec(db.getconnection(), query.c_str(), callbackusercoins, &coins, &errmsg);
+
+    if(result != SQLITE_OK){
+        std::cerr << "the error in getusercoins : " << errmsg << endl;
+        sqlite3_free(errmsg);
+    }
+
+    return coins;
+}
+
+bool loyaltyDAO::updateusercoins(int id, int nmcoins){
+    string query = "UPDATE users SET monthly_coins = " + std::to_string(nmcoins) + " WHERE id = " + std::to_string(id) + ";";
+    return db.executequery(query);
+}
+
+
+int loyaltyDAO::callbackgetuserbadge(void* data, int argc, char** argv, char** azColName){
+    string* result = (string*)data;
+
+    if(argc > 0 && argv[0]){
+        *result = argv[0];
+    }
+
+    return 0;
+}
+
+string loyaltyDAO::getuserbadge(int id){
+    string badge = "";
+    string query = "SELECT badge FROM users WHERE id = " + std::to_string(id) + ";";
+    char* errmsg = nullptr;
+
+    int result = sqlite3_exec(db.getconnection(), query.c_str(), callbackgetuserbadge, &badge, &errmsg);
+
+    if(result != SQLITE_OK){
+        std::cerr << "error in getuserbadge: " << errmsg << endl;
+        sqlite3_free(errmsg);
+    }
+
+    return badge;
+}
+
+bool loyaltyDAO::updateuserbadge(int id, string nbadge){
+    string query = "UPDATE users SET badge = '" + nbadge + "' WHERE id = " + std::to_string(id) + ";";
+    return db.executequery(query);
+}
+
+int loyaltyDAO::callbackgetcountorder(void* data, int argc, char** argv, char** azColName){
+    int* result = (int*)data;
+
+    if(argc > 0 && argv[0]){
+        *result = atoi(argv[0]);
+    }
+
+    return 0;
+}
+
+int loyaltyDAO::getordercount(int id){
+    int count = 0;
+
+    string query = "SELECT COUNT(*) FROM orders WHERE client_id = " + std::to_string(id) + ";";
+
+    char* errmsg = nullptr;
+
+    int result = sqlite3_exec(db.getconnection(), query.c_str(), callbackgetcountorder, &count, &errmsg);
+
+    return count;
+}
+
+
+
+int loyaltyDAO::callbackgetlastordertime(void* data, int argc, char** argv, char** azColName){
+    string* result = (string*)data;
+
+    if(argc > 0 && argv[0]){
+        *result = argv[0];
+    }
+
+    return 0;
+}
+
+
+string loyaltyDAO::getlastordertime(int id){
+    string lasttime = "";
+    string query = "SELECT order_date FROM orders WHERE client_id = " + std::to_string(id) + " ORDER BY order_date DESC LIMIT 1;";
+
+    char* errmsg = nullptr;
+
+    int result = sqlite3_exec(db.getconnection(), query.c_str(), callbackgetlastordertime, &lasttime, &errmsg);
+
+    if(result != SQLITE_OK){
+        std::cerr << "error in getlastordertime : " << errmsg << endl;
+        sqlite3_free(errmsg);
+    }
+
+    return lasttime;
 }
