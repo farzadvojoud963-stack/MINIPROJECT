@@ -48,6 +48,7 @@ void shoppingcart::display(int cliid, database& db) const{
     userDAO dao(db);
 
     person* p = dao.findbyid(cliid);
+    p->setlevelptrbylevel();
 
     for(int i = 0 ; i < cartitems.size() ; i++){
         cout << cartitems[i].getnameitem() << " x"<< numberofitems[i] <<" the price for per item: " << std::fixed << std::setprecision(0) << cartitems[i].getbasepriceitem() << endl;
@@ -60,6 +61,7 @@ void shoppingcart::display(int cliid, database& db) const{
     cout << "shopping const : +" << shcost << endl;
     cout << "============================\n";
     cout << "the total prices that you must pay is : " << gettotal() - disc + shcost << endl << endl; 
+    
 }
 
 void shoppingcart::clear(){
@@ -77,14 +79,24 @@ vector<int> shoppingcart::getnumberofitems() const{
     return numberofitems;
 }
 
-order shoppingcart::toorder(int cliid, int resid) const{
+order shoppingcart::toorder(int cliid, int resid, database& db) const{
     order nord(cliid, resid);
-
+    
     for (int i = 0; i < cartitems.size(); i++){
         nord.additem(cartitems[i], numberofitems[i]);
     }
+    
+    userDAO dao(db);
+    
+    person* p = dao.findbyid(cliid);
+    p->setlevelptrbylevel();
+    
+    float disc = (p->getlevelptr()->getdis() / 100) * gettotal();
+    float shcost = p->getlevelptr()->getshoppingcost();
 
-    nord.settotalprice(gettotal());
+    float result = gettotal() - disc + shcost;
+
+    nord.settotalprice(result);
 
     return nord;
 

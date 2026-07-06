@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <iomanip>
+#include "loyaltymanager.h"
 
 using std::cin;
 using std::cout;
@@ -206,6 +207,8 @@ void showclientmenu(database &db, client *cl)
     system("cls");
     int choice = -1;
 
+    manager mg(db);
+
     while (choice != 0)
     {
         cout << "**************the client menu***************\n";
@@ -335,11 +338,30 @@ void showclientmenu(database &db, client *cl)
 
             if (flag)
             {
-                order norder = cl->getshoppingcart().toorder(cl->getid(), cl->getcurrentresid());
+                
+
+
+                order norder = cl->getshoppingcart().toorder(cl->getid(), cl->getcurrentresid(), db);
                 orderDAO orders(db);
                 if (orders.insertorder(norder))
                 {
-                    cout << "your order is registered successfully!!\n";
+                    cout << "your order is registered successfully!!\n\n";
+
+                    if (!mg.addpoints(cl->getid(), cl->getshoppingcart().gettotal(), cl->getlevelptr(), "order"))
+                    {
+                        cout << "error in add point\n";
+                        system("pause");
+                        system("cls");
+                        continue;
+                    }
+
+                    if (mg.checkandupgrade(cl->getid(), cl->getlevelptr(), "system"))
+                    {
+                        std::cout << "your level upgraded. your new level is: " << cl->getlevelptr()->getlevelname() << endl;
+                    }
+
+                    cl->setpoints(mg.calculatepoints(cl->getshoppingcart().gettotal(), cl->getlevelptr()) + cl->getpoints());
+                    cl->setlevel(cl->getlevelptr()->getlevelname());
                     cl->clearcart();
                 }
                 else
@@ -523,7 +545,7 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                     string type;
                     int typenum;
                     cin >> typenum;
-                    
+
                     while (true)
                     {
                         if (typenum == 1)
@@ -836,7 +858,7 @@ void showadminmenu(database &db, systemadmin *sa)
     do
     {
         cout << "choose an option (enter the number of option)\n";
-        cout << "1.show all restaurants \n2.active/disactive restaurant(you must have id of restaurant) \n3.view salse report \n4.view all users\n5.delete a user  (enter 0 for exit)\n";
+        cout << "1.show all restaurants \n2.active/disactive restaurant(you must have id of restaurant) \n3.view salse report \n4.view all users\n5.delete a user\n6.change level of a client  (enter 0 for exit)\n";
         cin >> choice;
         system("cls");
 
@@ -919,7 +941,6 @@ void showadminmenu(database &db, systemadmin *sa)
                     deliverd++;
             }
 
-
             cout << "========= salse report ============\n";
             cout << "total salse (all orders): " << std::fixed << std::setprecision(0) << totalprice << " tomans\n";
             cout << std::defaultfloat;
@@ -945,22 +966,103 @@ void showadminmenu(database &db, systemadmin *sa)
             system("pause");
             system("cls");
             continue;
-        }else if(choice == 5){
+        }
+        else if (choice == 5)
+        {
             userDAO user(db);
             int userid;
             cout << "enter the id of user\n";
             cin >> userid;
             system("cls");
-            person* pr = user.findbyid(userid);
-            if(pr == nullptr){
+            person *pr = user.findbyid(userid);
+            if (pr == nullptr)
+            {
                 cout << "the user isn't found\n";
-            }else{
-                if(user.removebyid(userid)){
+            }
+            else
+            {
+                if (user.removebyid(userid))
+                {
                     cout << "the user removed successfully\n";
-                }else{
-                    cout << "the user not removed successfully try later\n";
-                    
                 }
+                else
+                {
+                    cout << "the user not removed successfully try later\n";
+                }
+            }
+            system("pause");
+            system("cls");
+            continue;
+        }
+        else if (choice == 6)
+        {
+            manager mg(db);
+            userDAO dao(db);
+            cout << "enter the id of client:\n";
+            int cliid;
+            cin >> cliid;
+
+            person *p = dao.findbyid(cliid);
+
+            if (p == nullptr)
+            {
+                cout << "the user with this id isn't found please try again\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            cout << "choose the level you want: \n1.normal \n2.silver \n3.gold \n4.vip\n";
+            int level;
+            cin >> level;
+
+            if (level == 1)
+            {
+                if (mg.changelevelbyadmin(cliid, "normal"))
+                {
+                    cout << "the level of client is changed successfully\n";
+                }
+                else
+                {
+                    cout << "the level of client is not changed successfully\n";
+                }
+            }
+            else if (level == 2)
+            {
+                if (mg.changelevelbyadmin(cliid, "silver"))
+                {
+                    cout << "the level of client is changed successfully\n";
+                }
+                else
+                {
+                    cout << "the level of client is not changed successfully\n";
+                }
+            }
+            else if (level == 3)
+            {
+                if (mg.changelevelbyadmin(cliid, "gold"))
+                {
+                    cout << "the level of client is changed successfully\n";
+                }
+                else
+                {
+                    cout << "the level of client is not changed successfully\n";
+                }
+            }
+            else if (level == 4)
+            {
+                if (mg.changelevelbyadmin(cliid, "vip"))
+                {
+                    cout << "the level of client is changed successfully\n";
+                }
+                else
+                {
+                    cout << "the level of client is not changed successfully\n";
+                }
+            }
+            else
+            {
+                cout << "the entire number isn't availble please try again\n\n";
             }
             system("pause");
             system("cls");

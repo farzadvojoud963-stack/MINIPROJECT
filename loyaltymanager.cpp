@@ -4,6 +4,7 @@ using std::cin;
 using std::endl;
 
 #include "loyaltymanager.h"
+#include <windows.h>
 
 
 int manager::calculatepoints(float ordertotal, membershiplevel* level){

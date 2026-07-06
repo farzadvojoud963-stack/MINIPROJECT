@@ -47,7 +47,7 @@ int person::getpoints() const{
     return points;
 }
 
-membershiplevel* person::getlevelptr() const{
+membershiplevel*& person::getlevelptr(){
     return levelptr;
 }
 
@@ -110,6 +110,8 @@ void person::setlevelptrbylevel(){
     }else if(level == "vip"){
         vip* v = new vip;
         setlevelptr(v);
+    }else {
+        cout << "level isn't avialble!!\n\n";
     }
 }
 
@@ -117,4 +119,7 @@ void person::setlevelptrbylevel(){
 
 void person::showinfouser(){
     cout << "id : " << getid() << " ================ name : " << getfirstname() << " " << getlastname() << " / role : " << getrole() << " / the username and password : " << getusername() << " " << getpassword() << " / the phone number : " << getphonnumber() << endl;
+    if(role == "client"){
+        cout << "the level of client is: " << level << "  / the points of client is: " << points << endl << endl;
+    }
 }

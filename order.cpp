@@ -93,6 +93,7 @@ void order::save(){
 void order::showorder(database& db){
     userDAO dao(db);
     person* p = dao.findbyid(clientid);
+    p->setlevelptrbylevel();
     float disc = (p->getlevelptr()->getdis() / 100) * totalprice;
     float shcost = p->getlevelptr()->getshoppingcost();
 

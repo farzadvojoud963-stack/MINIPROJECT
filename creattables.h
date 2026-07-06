@@ -17,6 +17,7 @@ const string createuser = R"(
      phone TEXT NOT NULL,
      level TEXT DEFAULT 'normal',
      points INTEGER DEFAULT 0,
+     monthly_coins INTEGER DEFAULT 0,
      restaurant_id INTEGER DEFAULT -1
     );
 )";

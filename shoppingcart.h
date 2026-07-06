@@ -11,8 +11,9 @@ class shoppingcart{
     private:
         vector<item> cartitems;
         vector<int> numberofitems;
-        
+        float finalprice;
     public:
+        shoppingcart() : finalprice(0.0) {}
         void add(item nitem, int nnumber);
         void remove(int itemid);
         double gettotal() const;
@@ -20,6 +21,6 @@ class shoppingcart{
         void clear();
         vector<item> getcartitems() const;
         vector<int> getnumberofitems() const;
-        order toorder(int cliid, int resid) const;
+        order toorder(int cliid, int resid, database& db) const;
 };
 #endif

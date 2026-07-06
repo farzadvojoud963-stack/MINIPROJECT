@@ -30,7 +30,6 @@ int main()
     {
 
         person *pr = signinmenu(db);
-        
 
         if (pr != nullptr)
         {
@@ -48,6 +47,8 @@ int main()
                 cl->setrole(pr->getrole());
                 cl->setusername(pr->getusername());
                 cl->setcurrentresid(-1);
+                cl->setlevel(pr->getlevel());
+                cl->setlevelptrbylevel();
 
                 if (cl != nullptr)
                 {
@@ -70,6 +71,8 @@ int main()
                     rm->setresid(pr->getresid());
                     rm->setrole(pr->getrole());
                     rm->setusername(pr->getusername());
+                    rm->setlevel("normal");
+                    rm->setlevelptr(nullptr);
 
                     if (rm != nullptr)
                     {
@@ -82,7 +85,7 @@ int main()
                 {
                     if (rol == "system_admin")
                     {
-                        systemadmin* sa = new systemadmin;
+                        systemadmin *sa = new systemadmin;
 
                         sa->setfirstname(pr->getfirstname());
                         sa->setid(pr->getid());
@@ -92,9 +95,11 @@ int main()
                         sa->setresid(pr->getresid());
                         sa->setrole(pr->getrole());
                         sa->setusername(pr->getusername());
+                        sa->setlevel("normal");
+                        sa->setlevelptr(nullptr);
 
-
-                        if(sa != nullptr){
+                        if (sa != nullptr)
+                        {
                             showadminmenu(db, sa);
                         }
 

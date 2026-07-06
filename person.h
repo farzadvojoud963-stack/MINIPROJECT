@@ -49,7 +49,7 @@ class person{
         int getresid() const;
         string getlevel() const;
         int getpoints() const;
-        membershiplevel* getlevelptr() const;
+        membershiplevel*& getlevelptr();
         //setter
         void setfirstname(string nfirstname);
         void setlastname(string nlastname);
