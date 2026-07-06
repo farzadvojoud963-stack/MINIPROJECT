@@ -43,6 +43,8 @@ class loyaltyDAO{
         static int callbackusercoins(void* data, int argc, char** argv, char** azColName);
         static int callbackgetuserbadge(void* data, int argc, char** argv, char** azColName);
         static int callbackgetcountorder(void* data, int argc, char** argv, char** azColName);
+        static int callbackgetlastordertime(void* data, int argc, char** argv, char** azColName);
+
     public:
         loyaltyDAO(database& ndb) : db(ndb){}
         string getuserlevel(int id);
@@ -59,7 +61,7 @@ class loyaltyDAO{
         string getuserbadge(int id);
         bool updateuserbadge(int id, string nbadge);
         int getordercount(int id);
-
+        string getlastordertime(int id);
 };
 
 #endif

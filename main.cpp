@@ -14,6 +14,14 @@
 #include "shoppingcart.h"
 #include "systemadmin.h"
 #include "userDAO.h"
+#include "loyaltyDAO.h"
+#include "loyaltymanager.h"
+#include "membershiplevel.h"
+#include "normalmember.h"
+#include "silvermember.h"
+#include "goldmember.h"
+#include "vipmember.h"
+
 
 #include <iostream>
 using std::cout;
