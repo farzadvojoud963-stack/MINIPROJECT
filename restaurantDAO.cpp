@@ -96,6 +96,11 @@ restaurant* restaurantDAO::findrestaurantbyid(int nid){
         return nullptr;
     }
 
+    if(res->getidres() == -1){
+        delete res;
+        return nullptr;
+    }
+
     return res;
 }
 
@@ -130,22 +135,26 @@ bool restaurantDAO::updaterestaurant(const restaurant& res){
 
 }
 
+int restaurantDAO::callbacklastresid(void *data, int argc, char **argv, char **azcolname){
+    int* result = (int*)data;
+
+    if(argc > 0 && argv[0]){
+        *result = atoi(argv[0]);
+    }
+
+    return 0;
+}
+
 
 int restaurantDAO::getsastinsertid(){
     string query = "SELECT last_insert_rowid();";
     int lastid = -1;
 
-    auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
-        if(argc > 0 && argv[0]){
-            int* idptr = (int*) data;
-            *idptr = atoi(argv[0]);
-        }
-        return 0;
-    };
+    
 
     char* errmsg = nullptr;
 
-    int result = sqlite3_exec(db.getconnection(), query.c_str(), callback, &lastid, &errmsg);
+    int result = sqlite3_exec(db.getconnection(), query.c_str(), callbacklastresid, &lastid, &errmsg);
 
     if(result != SQLITE_OK){
         std::cerr << "error in getlastid : " << errmsg << std::endl;

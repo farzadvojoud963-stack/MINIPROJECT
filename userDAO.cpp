@@ -79,6 +79,12 @@ person* userDAO::findbyid(int id){
         std::cerr << "error in find user by id : " << errmsg << std::endl;
         sqlite3_free(errmsg);
         delete user;
+        return nullptr;
+    }
+
+    if(user->getid() == -1){
+        delete user;
+        return nullptr;
     }
     
     return user;

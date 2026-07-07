@@ -137,5 +137,7 @@ void person::showinfouser(){
     cout << "id : " << getid() << " ================ name : " << getfirstname() << " " << getlastname() << " / role : " << getrole() << " / the username and password : " << getusername() << " " << getpassword() << " / the phone number : " << getphonnumber() << endl;
     if(role == "client"){
         cout << "the level of client is: " << level << "  / the points of client is: " << points << "  / the badge is : ( " << badge << " )" << endl << endl;
+    }else{
+        cout << endl;
     }
 }

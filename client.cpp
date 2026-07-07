@@ -5,6 +5,8 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+
+
 const shoppingcart& client::getshoppingcart(){
     return cart;
 }

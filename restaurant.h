@@ -23,13 +23,14 @@ class restaurant{
         menu resmenu;
         
     public:
-        restaurant(string nname="", string nphon="", string naddress="", string ndescription=""){
+        restaurant(string nname="", string nphon="", string naddress="", string ndescription="", int nid = -1){
             setname(nname);
             setphone(nphon);
             setdescription(ndescription);
             setaddress(naddress);
             prepTime = 0;
             isActive = true;
+            setidres(nid);
         }
         //getters
         int getidres() const;

@@ -131,11 +131,11 @@ person *signupmenu(database &db)
         cin >> username;
     }
 
-    person nperson(roll, firstname, lastname, phonenumber, username, pass, resid);
+    person *nperson = new person(roll, firstname, lastname, phonenumber, username, pass, resid);
 
-    if (ud.insertuser(nperson))
+    if (ud.insertuser(*nperson))
     {
-        person *personptr = &nperson;
+        person *personptr = nperson;
         return personptr;
     }
     else
@@ -145,7 +145,7 @@ person *signupmenu(database &db)
         exit(0);
     }
 
-    nperson.setresid(resid);
+    (*nperson).setresid(resid);
 
     system("cls");
     return nullptr;
@@ -179,7 +179,8 @@ person *signinmenu(database &db)
 
     system("cls");
 
-    person *pr = ud.findbyusername(username);
+    person *pr = new person;
+    pr = ud.findbyusername(username);
 
     cout << "enter your password : \n";
     string pass;
@@ -204,20 +205,18 @@ person *signinmenu(database &db)
 
 void showclientmenu(database &db, client *cl)
 {
-   
     system("cls");
+
     int choice = -1;
-   
+
     manager mg(db);
     userDAO dao(db);
-    
-    
+
     int cliid = cl->getid();
-    
-   
+
     while (choice != 0)
     {
-        
+
         person *p = dao.findbyid(cliid);
 
         cl->setfirstname(p->getfirstname());
@@ -235,7 +234,7 @@ void showclientmenu(database &db, client *cl)
         cl->setbadge(p->getbadge());
 
         cout << "**************the client menu***************\n\n";
-        cout << "your badge is: " << cl->getbadge() << " | your point is: " << cl->getpoints() << " | your level is: " << cl->getlevel() << " | number of your coins is : " << cl->getmcoins() << endl
+        cout << "your badge is: ( " << cl->getbadge() << " ) | your point is: " << cl->getpoints() << " | your level is: " << cl->getlevel() << " | number of your coins is : " << cl->getmcoins() << endl
              << endl;
         cout << "enter the number of option you want(for exit inter 0)\n";
         cout << "1.show all active restaurants \n2.choose restaurant \n3.show current restaurant menu \n4.add item to shopping cart \n5.show shopping cart \n6.check out order \n7.show history of orders\n\n";
@@ -247,6 +246,15 @@ void showclientmenu(database &db, client *cl)
             restaurantDAO res(db);
 
             vector<restaurant> ress = res.findactiverestaurants();
+
+            if (ress.size() == 0)
+            {
+                cout << "there is no active restaurant yet!\n\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
             cout << "list of active restaurants:\n";
             for (int i = 0; i < ress.size(); i++)
             {
@@ -259,6 +267,17 @@ void showclientmenu(database &db, client *cl)
         }
         else if (choice == 2)
         {
+            restaurantDAO res(db);
+
+            vector<restaurant> ress = res.findactiverestaurants();
+
+            if (ress.size() == 0)
+            {
+                cout << "there is no active restaurant yet! you can't choose any restaurant\n\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
 
             cout << "enter the id of resturant :\n";
             int resid;
@@ -345,6 +364,17 @@ void showclientmenu(database &db, client *cl)
         }
         else if (choice == 5)
         {
+
+            int size = cl->getshoppingcart().getcartitems().size();
+
+            if (size == 0)
+            {
+                cout << "shopping cart is empty!!\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
             cout << "-----------the shopping cart------------\n";
             cl->getshoppingcart().display(cl->getid(), db);
             system("pause");
@@ -427,7 +457,6 @@ void showclientmenu(database &db, client *cl)
                 {
                     cout << "your order is registered successfully!!\n\n";
 
-                    
                     if (!mg.addpoints(cl->getid(), cl->getshoppingcart().gettotal(), cl->getlevelptr(), "order", "point"))
                     {
                         cout << "error in add point\n";
@@ -435,15 +464,14 @@ void showclientmenu(database &db, client *cl)
                         system("cls");
                         continue;
                     }
-                    
+
                     if (mg.checkandupgrade(cl->getid(), cl->getlevelptr(), "system"))
                     {
                         std::cout << "your level upgraded. your new level is: " << cl->getlevelptr()->getlevelname() << endl;
                     }
-                    
+
                     mg.checkbadge(cl->getid());
 
-                    
                     cl->clearcart();
                 }
                 else
@@ -948,6 +976,15 @@ void showadminmenu(database &db, systemadmin *sa)
         {
             restaurantDAO res(db);
             vector<restaurant> ress = res.findallrestaurants();
+
+            if (ress.empty())
+            {
+                cout << "there is no restaurant yet!!\n\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
             cout << "========= the restaurants ===========\n";
             for (int i = 0; i < ress.size(); i++)
             {
@@ -959,12 +996,32 @@ void showadminmenu(database &db, systemadmin *sa)
         }
         else if (choice == 2)
         {
+            restaurantDAO res(db);
+            vector<restaurant> ress = res.findallrestaurants();
+
+            if (ress.empty())
+            {
+                cout << "there is no restaurant yet!!\n\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+            
             cout << "enter the id of restuant\n";
             int resid;
             cin >> resid;
             system("cls");
-            restaurantDAO res(db);
+            
+            
+            
             restaurant *myres = res.findrestaurantbyid(resid);
+            
+            if(myres == nullptr){
+                cout << "the restaurant with this id isn't found\n\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
 
             cout << "for active enter 1 and not enter 2\n";
             int a;
@@ -1040,6 +1097,14 @@ void showadminmenu(database &db, systemadmin *sa)
         {
             userDAO user(db);
             vector<person> users = user.findall();
+
+            if(users.empty()){
+                cout << "there is no user yet!!\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
             cout << "============== the all users info ===================\n";
             for (int i = 0; i < users.size(); i++)
             {
@@ -1052,6 +1117,15 @@ void showadminmenu(database &db, systemadmin *sa)
         else if (choice == 5)
         {
             userDAO user(db);
+            vector<person> prs = user.findall();
+            
+            if(prs.empty()){
+                cout << "there is no user yet\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+            
             int userid;
             cout << "enter the id of user\n";
             cin >> userid;
@@ -1080,6 +1154,15 @@ void showadminmenu(database &db, systemadmin *sa)
         {
             manager mg(db);
             userDAO dao(db);
+            vector<person> prs = dao.findall();
+
+            if(prs.empty()){
+                cout << "there is no user yet\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
             cout << "enter the id of client:\n";
             int cliid;
             cin >> cliid;
@@ -1154,6 +1237,14 @@ void showadminmenu(database &db, systemadmin *sa)
         {
             manager mg(db);
             userDAO dao(db);
+            vector<person> prs = dao.findall();
+
+            if(prs.empty()){
+                cout << "there is no user yet\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
 
             vector<person> p = dao.findall();
 
