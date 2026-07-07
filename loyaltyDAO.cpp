@@ -132,7 +132,7 @@ int loyaltyDAO::callbackcountusers(void* data, int argc, char** argv, char** azC
 
 int loyaltyDAO::countuserbylevel(const string& level){
     int count = 0;
-    string query = "SELECT COUNT(*) FROM users WEHRE level = " + level + ";";
+    string query = "SELECT COUNT(*) FROM users WHERE level = '" + level + "';";
 
     char* errmsg = nullptr;
 
@@ -147,7 +147,7 @@ int loyaltyDAO::countuserbylevel(const string& level){
 }
 
 bool loyaltyDAO::updateuserpoint(int id, int point){
-    string query = "UPDATE user SET points = " + std::to_string(point) + " WHERE id = " + std::to_string(id) + ";";
+    string query = "UPDATE users SET points = " + std::to_string(point) + " WHERE id = " + std::to_string(id) + ";";
     return db.executequery(query); 
 }
 

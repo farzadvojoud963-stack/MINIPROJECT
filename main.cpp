@@ -29,7 +29,7 @@ using std::string;
 
 int main()
 {
-    database db("restaurantManager.db");
+    database db("restaurantManage.db");
 
     int choice = firstmenu();
 

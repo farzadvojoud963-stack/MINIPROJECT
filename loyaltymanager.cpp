@@ -17,11 +17,13 @@ bool manager::addpoints(int id, float ordertotal, membershiplevel* level, string
     int addpoints = calculatepoints(ordertotal, level);
     int points = dao.getuserpoints(id) + addpoints;
     dao.updateuserpoint(id, points);
-    return dao.addpointhistory(id, points, why, type);
+    return dao.addpointhistory(id, addpoints, why, type);
 }
 
 bool manager::checkandupgrade(int id, membershiplevel*& level, string reason){
     int point = dao.getuserpoints(id);
+
+    if(level->getnextlevelptr() == nullptr) return false;
 
     if(point >= level->getnextlevelmin()){
         if(level->getlevelname() == "vip"){

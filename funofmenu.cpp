@@ -134,7 +134,6 @@ person *signupmenu(database &db)
 
     person *nperson = new person(roll, firstname, lastname, phonenumber, username, pass, resid);
     nperson->setlevelptrbylevel();
-    
 
     if (ud.insertuser(*nperson))
     {
@@ -215,14 +214,13 @@ void showclientmenu(database &db, client *cl)
     manager mg(db);
     userDAO dao(db);
 
-    
-    
+    int currentresid = -1;
+
     while (choice != 0)
     {
-       
+
         person *p = dao.findbyusername(cl->getusername());
-        cout << p->getid() << endl;
-        
+
         cl->setfirstname(p->getfirstname());
         cl->setid(p->getid());
         cl->setlastname(p->getlastname());
@@ -231,14 +229,12 @@ void showclientmenu(database &db, client *cl)
         cl->setresid(p->getresid());
         cl->setrole(p->getrole());
         cl->setusername(p->getusername());
-        cl->setcurrentresid(-1);
+        cl->setcurrentresid(currentresid);
         cl->setlevel(p->getlevel());
         cl->setlevelptrbylevel();
         cl->setmcoins(p->getmcoins());
         cl->setbadge(p->getbadge());
-        
-
-        
+        cl->setpoints(p->getpoints());
 
         cout << "**************the client menu***************\n\n";
         cout << "your badge is: ( " << cl->getbadge() << " ) | your point is: " << cl->getpoints() << " | your level is: " << cl->getlevel() << " | number of your coins is : " << cl->getmcoins() << endl
@@ -291,7 +287,18 @@ void showclientmenu(database &db, client *cl)
 
             cin >> resid;
 
+            restaurant *curres = res.findrestaurantbyid(resid);
+
+            if (curres == nullptr)
+            {
+                cout << "the restaurant by this id isn't found\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
             cl->setcurrentresid(resid);
+            currentresid = resid;
             cout << "the restaurant is selected successfully\n";
             system("pause");
             system("cls");
@@ -400,64 +407,87 @@ void showclientmenu(database &db, client *cl)
 
             if (flag)
             {
-
-                cout << "if you wanna use your coins enter 1 (if not enter 0)\n";
-                int coinchoise;
-                cin >> coinchoise;
-
                 order norder = cl->getshoppingcart().toorder(cl->getid(), cl->getcurrentresid(), db);
                 orderDAO orders(db);
 
-                if (coinchoise != 1 && coinchoise != 0)
-                {
-                    cout << "the entire number isn't availble please try again\n";
-                    system("pause");
-                    system("cls");
-                    continue;
-                }
-                system("cls");
+                float realtotalprice = (norder.gettotalprice() * (1 - (cl->getlevelptr()->getdis() / 100))) + cl->getlevelptr()->getshoppingcost();
 
-                if (coinchoise)
+                cout << "your total price with discount (without coins) is  : " << realtotalprice << endl;
+
+                if (cl->getmcoins() > 0)
                 {
-                    int availblecoins = cl->getmcoins();
-                    if (availblecoins <= 0)
+                    cout << "if you wanna use your coins enter 1 (if not enter 0)\n";
+                    int coinchoise;
+                    cin >> coinchoise;
+                    if (coinchoise != 1 && coinchoise != 0)
                     {
-                        cout << "you don't have any coins!! please try again for check out\n";
+                        cout << "the entire number isn't availble please try again\n";
                         system("pause");
                         system("cls");
                         continue;
                     }
-                    cout << "How many coins you wanna use (if you enter more than your coins we conseder the max coins you have mean " + std::to_string(cl->getmcoins()) + " coins )\n";
-                    int requestcoin;
-                    cin >> requestcoin;
-                    if (requestcoin > availblecoins)
+                    
+    
+                    if (coinchoise)
                     {
-                        requestcoin = availblecoins;
+                        int availblecoins = cl->getmcoins();
+                        if (availblecoins <= 0)
+                        {
+                            cout << "you don't have any coins!! please try again for check out\n";
+                            system("pause");
+                            system("cls");
+                            continue;
+                        }
+                        cout << "How many coins you wanna use (if you enter more than your coins we conseder the max coins you have mean " + std::to_string(cl->getmcoins()) + " coins )\n";
+                        int requestcoin;
+                        cin >> requestcoin;
+                        if (requestcoin > availblecoins)
+                        {
+                            requestcoin = availblecoins;
+                        }
+    
+                        float maxdiscount = realtotalprice;
+                        float requestdiscount = requestcoin * 10000;
+    
+                        int coinsused = requestcoin;
+                        if (requestdiscount > maxdiscount)
+                        {
+                            coinsused = maxdiscount / 10000;
+                        }
+    
+                        float realdiscount = coinsused * 10000;
+                        int coinssaved = requestcoin - coinsused;
+    
+                        norder.settotalprice(norder.gettotalprice() - realdiscount);
+    
+                        mg.usecoins(cl->getid(), coinsused);
+    
+                        cout << "your discount is done with your coins (the number of coins used is: " << coinsused << " )\n\n";
+    
+                        if (coinssaved > 0)
+                        {
+                            mg.addcoins(cl->getid(), coinssaved);
+                            cout << "your extra coins is returned to your account\n\n";
+                        }
                     }
+                }else
+                {
+                    cout << "you don't have any coins. you can't use coins!!\n";
+                }
 
-                    float maxdiscount = norder.gettotalprice();
-                    float requestdiscount = requestcoin * 10000;
+                cout << "if you wanna check out? (enter the number) \n1.yes \n2.no\n";
+                int checkout = -1;
+                cin >> checkout;
 
-                    int coinsused = requestcoin;
-                    if (requestdiscount > maxdiscount)
-                    {
-                        coinsused = maxdiscount / 10000;
+                if(checkout != 1){
+                    if(checkout != 0){
+                        cout << "you enter the wrong number try again\n";
+                    }else{
+                        cout << "check out is canseld you will back to menu!!\n";
                     }
-
-                    float realdiscount = coinsused * 10000;
-                    int coinssaved = requestcoin - coinsused;
-
-                    norder.settotalprice(norder.gettotalprice() - realdiscount);
-
-                    mg.usecoins(cl->getid(), coinsused);
-
-                    cout << "your discount is done with your coins (the number of coins used is: " << coinsused << " )\n\n";
-
-                    if (coinssaved > 0)
-                    {
-                        mg.addcoins(cl->getid(), coinssaved);
-                        cout << "your extra coins is returned to your account\n\n";
-                    }
+                    system("pause");
+                    system("cls");
+                    continue;
                 }
 
                 if (orders.insertorder(norder))
