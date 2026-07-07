@@ -69,7 +69,7 @@ void manager::assignusercoins(int id){
 
     if(coins > 0){
         int currentcoins = dao.getusercoins(id);
-        dao.updateusercoins(id, currentcoins);
+        dao.updateusercoins(id, currentcoins + coins);
         dao.addpointhistory(id, coins, "monthly_coins", "coin");
     }
 }

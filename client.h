@@ -20,7 +20,9 @@ class client : public person{
         int currentresid;
     public:
         client() {}
-        client(string nrole, string nfirstname, string nlastname, string nphonnumber,string nusername, string npassword) : person(nrole, nfirstname, nlastname, nphonnumber, nusername, npassword) , currentresid(-1){}
+        client(string nrole, string nfirstname, string nlastname, string nphonnumber,string nusername, string npassword, int nresid = -1) : person(nrole, nfirstname, nlastname, nphonnumber, nusername, npassword) , currentresid(-1){
+            setresid(nresid);
+        }
         ~client(){}
 
         const shoppingcart& getshoppingcart();

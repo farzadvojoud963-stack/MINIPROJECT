@@ -127,17 +127,17 @@ int main()
     {
         if (choice == 2)
         {
-            
+
             person *pr = signupmenu(db);
+            
             if (pr != nullptr)
             {
                 
                 string rol = pr->getrole();
                 if (rol == "client")
                 {
-                    client* cl = new client;
-                    
-                    
+                    client *cl = new client;
+
                     cl->setfirstname(pr->getfirstname());
                     cl->setid(pr->getid());
                     cl->setlastname(pr->getlastname());
@@ -148,10 +148,10 @@ int main()
                     cl->setusername(pr->getusername());
                     cl->setcurrentresid(-1);
                     cl->setlevel(pr->getlevel());
-                    cl->setlevelptrbylevel();
+                    cl->setlevelptr(pr->getlevelptr());
                     cl->setmcoins(pr->getmcoins());
                     cl->setbadge(pr->getbadge());
-                    
+
                     if (cl != nullptr)
                     {
                         showclientmenu(db, cl);

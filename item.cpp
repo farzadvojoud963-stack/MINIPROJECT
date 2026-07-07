@@ -91,7 +91,8 @@ void item::showitem(){
     if(typeitem == "drink"){
         cout << "the volum : " << volumitem << " liter\n";
     }else{
-        cout << "the prep time : " << preptimeitem << "minutes\n";
+        cout << "the prep time : " << std::fixed << std::setprecision(0) << preptimeitem << " minutes\n";
+        cout << std::defaultfloat;
     }
     cout << "the description is : " << descriptionitem << endl;
     cout << "situation :";

@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include "loyaltymanager.h"
+#include "client.h"
 
 using std::cin;
 using std::cout;
@@ -132,6 +133,8 @@ person *signupmenu(database &db)
     }
 
     person *nperson = new person(roll, firstname, lastname, phonenumber, username, pass, resid);
+    nperson->setlevelptrbylevel();
+    
 
     if (ud.insertuser(*nperson))
     {
@@ -212,13 +215,14 @@ void showclientmenu(database &db, client *cl)
     manager mg(db);
     userDAO dao(db);
 
-    int cliid = cl->getid();
-
+    
+    
     while (choice != 0)
     {
-
-        person *p = dao.findbyid(cliid);
-
+       
+        person *p = dao.findbyusername(cl->getusername());
+        cout << p->getid() << endl;
+        
         cl->setfirstname(p->getfirstname());
         cl->setid(p->getid());
         cl->setlastname(p->getlastname());
@@ -232,6 +236,9 @@ void showclientmenu(database &db, client *cl)
         cl->setlevelptrbylevel();
         cl->setmcoins(p->getmcoins());
         cl->setbadge(p->getbadge());
+        
+
+        
 
         cout << "**************the client menu***************\n\n";
         cout << "your badge is: ( " << cl->getbadge() << " ) | your point is: " << cl->getpoints() << " | your level is: " << cl->getlevel() << " | number of your coins is : " << cl->getmcoins() << endl
@@ -639,6 +646,15 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                 {
                     menuitemDAO resmenu(db);
                     vector<item> mymenu = resmenu.finditemsbyres(rm->getresid());
+
+                    if (mymenu.empty())
+                    {
+                        cout << "your menu is empty. at first add an item to it\n";
+                        system("pause");
+                        system("cls");
+                        continue;
+                    }
+
                     cout << "============= your menu ============\n";
                     for (int i = 0; i < mymenu.size(); i++)
                     {
@@ -702,7 +718,7 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                     system("cls");
 
                     cout << "enter the volume (for drink) or prep time based on minute (for food) and 0 for (others)\n";
-                    float detaile;
+                    float detaile = 0;
                     cin >> detaile;
                     system("cls");
 
@@ -727,11 +743,21 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                 }
                 else if (editmenuchoice == 3)
                 {
+                    menuitemDAO nitem(db);
                     cout << "enter the id of item: \n";
                     int iditem;
                     cin >> iditem;
 
-                    menuitemDAO nitem(db);
+                    vector<item> mymenu = nitem.finditemsbyres(rm->getresid());
+
+                    if (mymenu.empty())
+                    {
+                        cout << "your menu is empty. at first add an item to it\n";
+                        system("pause");
+                        system("cls");
+                        continue;
+                    }
+
                     item *myitem = nitem.finditembyid(iditem);
 
                     if (myitem == nullptr)
@@ -837,11 +863,21 @@ void showmanagermenu(database &db, restaurantmanager *rm)
                 }
                 else if (editmenuchoice == 4)
                 {
+                    menuitemDAO nitem(db);
+                    vector<item> mymenu = nitem.finditemsbyres(rm->getresid());
+
+                    if (mymenu.empty())
+                    {
+                        cout << "your menu is empty. at first add an item to it\n";
+                        system("pause");
+                        system("cls");
+                        continue;
+                    }
+
                     cout << "enter the id of item: \n";
                     int iditem;
                     cin >> iditem;
 
-                    menuitemDAO nitem(db);
                     item *myitem = nitem.finditembyid(iditem);
 
                     if (myitem == nullptr)
@@ -1006,17 +1042,16 @@ void showadminmenu(database &db, systemadmin *sa)
                 system("cls");
                 continue;
             }
-            
+
             cout << "enter the id of restuant\n";
             int resid;
             cin >> resid;
             system("cls");
-            
-            
-            
+
             restaurant *myres = res.findrestaurantbyid(resid);
-            
-            if(myres == nullptr){
+
+            if (myres == nullptr)
+            {
                 cout << "the restaurant with this id isn't found\n\n";
                 system("pause");
                 system("cls");
@@ -1098,7 +1133,8 @@ void showadminmenu(database &db, systemadmin *sa)
             userDAO user(db);
             vector<person> users = user.findall();
 
-            if(users.empty()){
+            if (users.empty())
+            {
                 cout << "there is no user yet!!\n";
                 system("pause");
                 system("cls");
@@ -1118,14 +1154,15 @@ void showadminmenu(database &db, systemadmin *sa)
         {
             userDAO user(db);
             vector<person> prs = user.findall();
-            
-            if(prs.empty()){
+
+            if (prs.empty())
+            {
                 cout << "there is no user yet\n";
                 system("pause");
                 system("cls");
                 continue;
             }
-            
+
             int userid;
             cout << "enter the id of user\n";
             cin >> userid;
@@ -1156,7 +1193,8 @@ void showadminmenu(database &db, systemadmin *sa)
             userDAO dao(db);
             vector<person> prs = dao.findall();
 
-            if(prs.empty()){
+            if (prs.empty())
+            {
                 cout << "there is no user yet\n";
                 system("pause");
                 system("cls");
@@ -1239,7 +1277,8 @@ void showadminmenu(database &db, systemadmin *sa)
             userDAO dao(db);
             vector<person> prs = dao.findall();
 
-            if(prs.empty()){
+            if (prs.empty())
+            {
                 cout << "there is no user yet\n";
                 system("pause");
                 system("cls");
