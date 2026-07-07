@@ -14,14 +14,13 @@
 #include "shoppingcart.h"
 #include "systemadmin.h"
 #include "userDAO.h"
+#include "goldmember.h"
+#include "normalmember.h"
+#include "silvermember.h"
+#include "vipmember.h"
 #include "loyaltyDAO.h"
 #include "loyaltymanager.h"
 #include "membershiplevel.h"
-#include "normalmember.h"
-#include "silvermember.h"
-#include "goldmember.h"
-#include "vipmember.h"
-
 
 #include <iostream>
 using std::cout;
@@ -30,7 +29,7 @@ using std::string;
 
 int main()
 {
-    database db("restaurantmanager.db");
+    database db("restaurant.db");
 
     int choice = firstmenu();
 
@@ -130,13 +129,10 @@ int main()
             person *pr = signupmenu(db);
             if (pr != nullptr)
             {
-                cout << "1\n";
                 string rol = pr->getrole();
                 if (rol == "client")
                 {
-                    cout << "2\n";
                     client *cl = dynamic_cast<client *>(pr);
-                    cout << "3\n";
                     showclientmenu(db, cl);
                 }
                 else
