@@ -153,6 +153,11 @@ order* orderDAO::findorderbyid(int nid){
         return nullptr;
     }
 
+    if(ord->getclientid() == -1){
+        delete ord;
+        return nullptr;
+    }
+
     return ord;
 }
 

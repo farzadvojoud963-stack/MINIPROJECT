@@ -64,7 +64,8 @@ int loyaltyDAO::callbackpointhistory(void* data, int argc, char** argv, char** a
     it.userid = atoi(argv[1]);
     it.pointchang = atoi(argv[2]);
     it.reason = argv[3] ? argv[3] : "";
-    it.creatat = argv[4] ? argv[4] : "";
+    it.type = argv[4] ? argv[4] : "";
+    it.creatat = argv[5] ? argv[5] : "";
 
     list->push_back(it);
 
@@ -74,7 +75,13 @@ int loyaltyDAO::callbackpointhistory(void* data, int argc, char** argv, char** a
 
 vector<pointhistory> loyaltyDAO::getpointhistory(int id){
     vector<pointhistory> history;
-    string query = "SELECT * FROM point_history WHERE user_id = " + std::to_string(id) + ";";
+    string query;
+
+    if(id == -1){
+        query = "SELECT * FROM point_history ORDER BY created_at DESC;";
+    }else{
+        query = "SELECT * FROM point_history WHERE user_id = " + std::to_string(id) + " ORDER BY created_at DESC;";
+    }
 
     char* errmsg = nullptr;
 
@@ -105,8 +112,15 @@ int loyaltyDAO::callbackmembershiphistory(void* data, int argc, char** argv, cha
 
 vector<memberhistory> loyaltyDAO::getmembershiphistory(int id){
     vector<memberhistory> memberhistory;
+    
+    string query;
 
-    string query = "SELECT * FROM membership_history WHERE user_id = " + std::to_string(id) + " ORDER BY changed_at DESC;";
+    if(id == -1){
+        query = "SELECT * FROM membership_history ORDER BY changed_at DESC;";
+    }
+    else{
+        query = "SELECT * FROM membership_history WHERE user_id = " + std::to_string(id) + " ORDER BY changed_at DESC;";
+    }
 
     char* errmsg = nullptr;
 

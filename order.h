@@ -24,7 +24,7 @@ class order{
         string date;
         bool issaved;
     public:
-        order(int cliid=0, int resid=0){
+        order(int cliid=-1, int resid=-1){
             clientid = cliid;
             restaurantid = resid;
             totalprice = 0 ;

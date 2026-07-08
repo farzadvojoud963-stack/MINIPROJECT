@@ -15,6 +15,7 @@ struct pointhistory
     int pointchang;
     string reason;
     string creatat;
+    string type;
 };
 
 struct memberhistory

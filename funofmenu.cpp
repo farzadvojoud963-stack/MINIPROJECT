@@ -345,7 +345,6 @@ void showclientmenu(database &db, client *cl)
         {
 
             menuitemDAO menu(db);
-            
 
             if (cl->getcurrentresid() == -1)
             {
@@ -357,7 +356,8 @@ void showclientmenu(database &db, client *cl)
                 int iditem;
                 cin >> iditem;
 
-                if(menu.finditembyid(iditem) == nullptr){
+                if (menu.finditembyid(iditem) == nullptr)
+                {
                     cout << "item is not found please try again!!\n";
                     system("pause");
                     system("cls");
@@ -421,10 +421,9 @@ void showclientmenu(database &db, client *cl)
 
                 float realtotalprice = (cl->getshoppingcart().gettotal() * (1 - (cl->getlevelptr()->getdis() / 100))) + cl->getlevelptr()->getshoppingcost();
 
-                order* norder = cl->getshoppingcart().toorder(cl->getid(), cl->getcurrentresid(), realtotalprice);
-                
-                orderDAO orders(db);
+                order *norder = cl->getshoppingcart().toorder(cl->getid(), cl->getcurrentresid(), realtotalprice);
 
+                orderDAO orders(db);
 
                 cout << "your total price with discount (without coins) is  : " << std::fixed << std::setprecision(0) << realtotalprice << endl;
                 cout << std::defaultfloat;
@@ -440,9 +439,9 @@ void showclientmenu(database &db, client *cl)
                         system("cls");
                         continue;
                     }
-                    
+
                     norder->settotalprice(realtotalprice);
-    
+
                     if (coinchoise)
                     {
                         int availblecoins = cl->getmcoins();
@@ -460,33 +459,34 @@ void showclientmenu(database &db, client *cl)
                         {
                             requestcoin = availblecoins;
                         }
-    
+
                         float maxdiscount = realtotalprice;
                         float requestdiscount = requestcoin * 10000;
-    
+
                         int coinsused = requestcoin;
                         if (requestdiscount > maxdiscount)
                         {
                             coinsused = maxdiscount / 10000;
                         }
-    
+
                         float realdiscount = coinsused * 10000;
                         int coinssaved = requestcoin - coinsused;
-    
+
                         norder->settotalprice(realtotalprice - realdiscount);
-    
+
                         mg.usecoins(cl->getid(), coinsused);
-    
+
                         cout << "your discount is done with your coins (the number of coins used is: " << coinsused << " )\n";
                         cout << "final total price with your coins is: " << std::fixed << std::setprecision(0) << realtotalprice - realdiscount << endl;
-    
+
                         if (coinssaved > 0)
                         {
                             mg.addcoins(cl->getid(), coinssaved);
                             cout << "your extra coins is returned to your account\n\n";
                         }
                     }
-                }else
+                }
+                else
                 {
                     cout << "you don't have any coins. you can't use coins!!\n";
                     norder->settotalprice(realtotalprice);
@@ -496,10 +496,14 @@ void showclientmenu(database &db, client *cl)
                 int checkout = -1;
                 cin >> checkout;
 
-                if(checkout != 1){
-                    if(checkout != 0){
+                if (checkout != 1)
+                {
+                    if (checkout != 0)
+                    {
                         cout << "you enter the wrong number try again\n";
-                    }else{
+                    }
+                    else
+                    {
                         cout << "check out is canseld you will back to menu!!\n";
                     }
                     system("pause");
@@ -518,13 +522,13 @@ void showclientmenu(database &db, client *cl)
                         system("cls");
                         continue;
                     }
-                    
+
                     if (mg.checkandupgrade(cl->getid(), cl->getlevelptr(), "system"))
                     {
-                        
+
                         cout << "your level upgraded. your new level is: " << cl->getlevelptr()->getlevelname() << endl;
                     }
-                    
+
                     mg.checkbadge(cl->getid());
 
                     cl->clearcart();
@@ -987,6 +991,15 @@ void showmanagermenu(database &db, restaurantmanager *rm)
         else if (choice == 5)
         {
             orderDAO resorder(db);
+            vector<order> orders = resorder.findallorders();
+
+            if(orders.empty()){
+                cout << "there is no order yet please try again\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
             cout << "enter the id of order\n";
             int idorder;
             cin >> idorder;
@@ -1052,7 +1065,7 @@ void showadminmenu(database &db, systemadmin *sa)
     do
     {
         cout << "choose an option (enter the number of option)\n";
-        cout << "1.show all restaurants \n2.active/disactive restaurant(you must have id of restaurant) \n3.view salse report \n4.view all users\n5.delete a user\n6.change level of a client \n7.assign coins to all clients  (enter 0 for exit)\n";
+        cout << "1.show all restaurants \n2.active/disactive restaurant(you must have id of restaurant) \n3.view salse report \n4.view all users\n5.delete a user\n6.change level of a client \n7.assign coins to all clients \n8.view membership history for all client \n9.view membership history for a contain client \n10.view point history for all \n11.view point history for a contain client \n(enter 0 for exit)\n";
         cin >> choice;
         system("cls");
 
@@ -1341,6 +1354,161 @@ void showadminmenu(database &db, systemadmin *sa)
             }
 
             cout << "the coins is assigned to clients.\n\n";
+            system("pause");
+            system("cls");
+            continue;
+        }
+        else if (choice == 8)
+        {
+            userDAO udao(db);
+            vector<person> users = udao.findall();
+
+            if (users.empty())
+            {
+                cout << "there is no users yet!!\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            loyaltyDAO dao(db);
+            vector<memberhistory> history = dao.getmembershiphistory(-1);
+
+            if (history.size() == 0)
+            {
+                cout << "there is no history!!\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            for (int i = 0; i < history.size(); i++)
+            {
+                cout << "user id: " << history[i].userid << " | " << history[i].oldlevel << " -> " << history[i].newlevel << " | " << history[i].changedat << " | " << history[i].changedby << endl << endl;
+            }
+            system("pause");
+            system("cls");
+            continue;
+        }
+        else if (choice == 9)
+        {
+            userDAO udao(db);
+            vector<person> users = udao.findall();
+
+            if (users.empty())
+            {
+                cout << "there is no users yet!!\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            cout << "enter id of user: \n";
+            int userid;
+            cin >> userid;
+
+            if (udao.findbyid(userid) == nullptr)
+            {
+                cout << "the user not found\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            loyaltyDAO ldao(db);
+
+            vector<memberhistory> history = ldao.getmembershiphistory(userid);
+
+            if (history.empty())
+            {
+                cout << "the user's history is empty!\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            for (int i = 0; i < history.size(); i++)
+            {
+                cout << "user id : " << history[i].userid << " | " << history[i].oldlevel << " -> " << history[i].newlevel << " | " << history[i].changedat << " | " << history[i].changedby << endl
+                     << endl;
+            }
+            system("pause");
+            system("cls");
+            continue;
+        }
+        else if (choice == 10)
+        {
+            userDAO udao(db);
+            vector<person> users = udao.findall();
+
+            if (users.empty())
+            {
+                cout << "there is no users yet!!\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            loyaltyDAO ldao(db);
+            vector<pointhistory> history = ldao.getpointhistory(-1);
+
+            if (history.empty())
+            {
+                cout << "there is no history yet\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            for (int i = 0; i < history.size(); i++)
+            {
+                cout << "user id: " << history[i].userid << " | change: " << history[i].pointchang << " | reason: " << history[i].reason << " | type: " << history[i].type << " | " << history[i].creatat << endl
+                     << endl;
+            }
+            system("pause");
+            system("cls");
+            continue;
+        }
+        else if (choice == 11)
+        {
+            userDAO udao(db);
+            vector<person> users = udao.findall();
+
+            if (users.empty())
+            {
+                cout << "there is no users yet!!\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            cout << "enter the user id: " << endl;
+            int userid;
+            cin >> userid;
+
+            if (udao.findbyid(userid) == nullptr)
+            {
+                cout << "user is not found\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            loyaltyDAO ldao(db);
+            vector<pointhistory> history = ldao.getpointhistory(userid);
+            if (history.empty())
+            {
+                cout << "user has no history\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            for (int i = 0; i < history.size(); i++)
+            {
+                cout << "user id: " << history[i].userid << " | change: " << history[i].pointchang << " | reason: " << history[i].reason << " | type: " << history[i].type << " | " << history[i].creatat << endl << endl;
+            }
+
             system("pause");
             system("cls");
             continue;
