@@ -79,25 +79,19 @@ vector<int> shoppingcart::getnumberofitems() const{
     return numberofitems;
 }
 
-order shoppingcart::toorder(int cliid, int resid, database& db) const{
-    order nord(cliid, resid);
+order* shoppingcart::toorder(int cliid, int resid, float realtotal) const{
+    order* nord = new order(cliid, resid);
+    
     
     for (int i = 0; i < cartitems.size(); i++){
-        nord.additem(cartitems[i], numberofitems[i]);
+        nord->additem(cartitems[i], numberofitems[i]);
     }
     
-    userDAO dao(db);
     
-    person* p = dao.findbyid(cliid);
-    p->setlevelptrbylevel();
+    nord->settotalprice(realtotal);
     
-    float disc = (p->getlevelptr()->getdis() / 100) * gettotal();
-    float shcost = p->getlevelptr()->getshoppingcost();
 
-    float result = gettotal() - disc + shcost;
-
-    nord.settotalprice(result);
-
+    
     return nord;
 
 }

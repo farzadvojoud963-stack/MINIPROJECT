@@ -343,6 +343,10 @@ void showclientmenu(database &db, client *cl)
         }
         else if (choice == 4)
         {
+
+            menuitemDAO menu(db);
+            
+
             if (cl->getcurrentresid() == -1)
             {
                 cout << "pleas at first choose the current restaurant id\n";
@@ -352,6 +356,13 @@ void showclientmenu(database &db, client *cl)
                 cout << "enter the id of item: \n";
                 int iditem;
                 cin >> iditem;
+
+                if(menu.finditembyid(iditem) == nullptr){
+                    cout << "item is not found please try again!!\n";
+                    system("pause");
+                    system("cls");
+                    continue;
+                }
 
                 cout << "how many you want: \n";
                 int num;
@@ -407,13 +418,16 @@ void showclientmenu(database &db, client *cl)
 
             if (flag)
             {
-                order norder = cl->getshoppingcart().toorder(cl->getid(), cl->getcurrentresid(), db);
+
+                float realtotalprice = (cl->getshoppingcart().gettotal() * (1 - (cl->getlevelptr()->getdis() / 100))) + cl->getlevelptr()->getshoppingcost();
+
+                order* norder = cl->getshoppingcart().toorder(cl->getid(), cl->getcurrentresid(), realtotalprice);
+                
                 orderDAO orders(db);
 
-                float realtotalprice = (norder.gettotalprice() * (1 - (cl->getlevelptr()->getdis() / 100))) + cl->getlevelptr()->getshoppingcost();
 
-                cout << "your total price with discount (without coins) is  : " << realtotalprice << endl;
-
+                cout << "your total price with discount (without coins) is  : " << std::fixed << std::setprecision(0) << realtotalprice << endl;
+                cout << std::defaultfloat;
                 if (cl->getmcoins() > 0)
                 {
                     cout << "if you wanna use your coins enter 1 (if not enter 0)\n";
@@ -427,6 +441,7 @@ void showclientmenu(database &db, client *cl)
                         continue;
                     }
                     
+                    norder->settotalprice(realtotalprice);
     
                     if (coinchoise)
                     {
@@ -458,11 +473,12 @@ void showclientmenu(database &db, client *cl)
                         float realdiscount = coinsused * 10000;
                         int coinssaved = requestcoin - coinsused;
     
-                        norder.settotalprice(norder.gettotalprice() - realdiscount);
+                        norder->settotalprice(realtotalprice - realdiscount);
     
                         mg.usecoins(cl->getid(), coinsused);
     
-                        cout << "your discount is done with your coins (the number of coins used is: " << coinsused << " )\n\n";
+                        cout << "your discount is done with your coins (the number of coins used is: " << coinsused << " )\n";
+                        cout << "final total price with your coins is: " << std::fixed << std::setprecision(0) << realtotalprice - realdiscount << endl;
     
                         if (coinssaved > 0)
                         {
@@ -473,9 +489,10 @@ void showclientmenu(database &db, client *cl)
                 }else
                 {
                     cout << "you don't have any coins. you can't use coins!!\n";
+                    norder->settotalprice(realtotalprice);
                 }
 
-                cout << "if you wanna check out? (enter the number) \n1.yes \n2.no\n";
+                cout << "if you wanna check out? (enter the number) \n1.yes \n0.no\n";
                 int checkout = -1;
                 cin >> checkout;
 
@@ -490,7 +507,7 @@ void showclientmenu(database &db, client *cl)
                     continue;
                 }
 
-                if (orders.insertorder(norder))
+                if (orders.insertorder(*norder))
                 {
                     cout << "your order is registered successfully!!\n\n";
 
@@ -501,12 +518,13 @@ void showclientmenu(database &db, client *cl)
                         system("cls");
                         continue;
                     }
-
+                    
                     if (mg.checkandupgrade(cl->getid(), cl->getlevelptr(), "system"))
                     {
-                        std::cout << "your level upgraded. your new level is: " << cl->getlevelptr()->getlevelname() << endl;
+                        
+                        cout << "your level upgraded. your new level is: " << cl->getlevelptr()->getlevelname() << endl;
                     }
-
+                    
                     mg.checkbadge(cl->getid());
 
                     cl->clearcart();

@@ -20,23 +20,24 @@ bool manager::addpoints(int id, float ordertotal, membershiplevel* level, string
     return dao.addpointhistory(id, addpoints, why, type);
 }
 
-bool manager::checkandupgrade(int id, membershiplevel*& level, string reason){
+bool manager::checkandupgrade(int id, membershiplevel*& level, string reason) {
+    if (level == nullptr) return false;
+
     int point = dao.getuserpoints(id);
 
-    if(level->getnextlevelptr() == nullptr) return false;
+    membershiplevel* next = level->getnextlevelptr();
+    if (next == nullptr) return false;
 
-    if(point >= level->getnextlevelmin()){
-        if(level->getlevelname() == "vip"){
-            return false;
-        }
+    if (point >= next->getlevelmin()) { 
         string oldlevel = level->getlevelname();
         delete level;
-        level = level->getnextlevelptr();
+        level = next;
         string newlevel = level->getlevelname();
         dao.updateuserlevel(id, newlevel);
         return dao.addmembershiphistory(id, oldlevel, newlevel, reason);
     }
 
+    delete next;
     return false;
 }
 

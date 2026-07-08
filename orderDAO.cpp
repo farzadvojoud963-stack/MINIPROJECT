@@ -195,7 +195,7 @@ bool orderDAO::insertorder(order& norder){
     string query = "INSERT INTO orders (client_id, restaurant_id, total_price, status, order_date) VALUES("
     + std::to_string(norder.getclientid()) + ", "
     + std::to_string(norder.getresid()) + ", "
-    + std::to_string(norder.gettotalprice()) + ", '"
+    + std::to_string(norder.gettotalpriceafterDAO()) + ", '"
     + norder.getstatus() + "', datetime('now'));";
 
     if(!db.executequery(query)){

@@ -30,6 +30,7 @@ void order::setrestaurantid(int nresid){
 
 void order::settotalprice(float ntoprice){
     totalprice = ntoprice;
+    
 }
 
 
@@ -101,10 +102,7 @@ void order::showorder(database& db){
     cout << "order id : " << orderid << endl;
     cout << "date : " << date << endl;
     cout << "status : " << status << endl;
-    cout << "total base price is : " << std::fixed << std::setprecision(0) << totalprice << endl;
-    cout << "Discount (" << p->getlevelptr()->getdis() << "%) : -" << disc << endl;
-    cout << "shopping const : +" << shcost << endl;
-    cout << "the total prices (without VAT) is: " << totalprice - disc + shcost << endl;
+    cout << std::fixed << std::setprecision(0) << "the total prices (without VAT) is: " << totalprice << endl;
     cout << std::defaultfloat;
     cout << "total price you must pay (with VAT (10%)) : " << std::fixed << std::setprecision(0) << totalprice + (totalprice * 0.1) << endl;
     cout << std::defaultfloat;

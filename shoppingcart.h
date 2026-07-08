@@ -21,6 +21,6 @@ class shoppingcart{
         void clear();
         vector<item> getcartitems() const;
         vector<int> getnumberofitems() const;
-        order toorder(int cliid, int resid, database& db) const;
+        order* toorder(int cliid, int resid, float realtotal) const;
 };
 #endif

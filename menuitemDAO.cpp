@@ -66,6 +66,12 @@ item* menuitemDAO::finditembyid(int nid){
         std::cout << "error in find by id itme : " << errmsg << std::endl;
         delete it;
         sqlite3_free(errmsg);
+        return nullptr;
+    }
+
+    if(it->getresid() == -1){
+        delete it;
+        return nullptr;
     }
 
     return it;
