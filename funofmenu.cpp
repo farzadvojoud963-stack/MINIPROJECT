@@ -170,13 +170,17 @@ person *signinmenu(database &db)
             if (username == "exit")
             {
                 break;
-                return nullptr;
+               
             }
         }
         else
         {
             break;
         }
+    }
+
+    if(username == "exit"){
+        return nullptr;
     }
 
     system("cls");
