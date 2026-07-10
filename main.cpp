@@ -22,6 +22,7 @@
 #include "loyaltymanager.h"
 #include "membershiplevel.h"
 
+
 #include <iostream>
 using std::cout;
 
@@ -30,7 +31,17 @@ using std::string;
 int main()
 {
     database db("restaurantManage.db");
+    manager lomg(db);
+    userDAO userd(db);
 
+    vector<person> persons = userd.findbyroll("client");
+
+    if(isfirstofmonth()){
+        for(int i = 0; i < persons.size(); i++){
+            lomg.assignusercoins(persons[i].getid());
+        }
+    }
+    
     int choice = firstmenu();
 
     if (choice == 1)

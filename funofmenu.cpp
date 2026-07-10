@@ -15,6 +15,17 @@ using std::string;
 #include "userDAO.h"
 #include "person.h"
 
+#include <ctime>
+
+bool isfirstofmonth(){
+    time_t now = time(0);
+    tm* timenow = localtime(&now);
+
+    return (timenow->tm_mday == 1);
+}
+
+
+
 int firstmenu()
 {
     cout << "are you signed up? if yes enter 1 and no enter 2 (for exit from program enter 0):\n";

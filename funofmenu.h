@@ -23,7 +23,6 @@ person* signinmenu(database& db);
 void showclientmenu(database &db, client* cl);
 void showadminmenu(database &db, systemadmin* sa);
 void showmanagermenu(database &db, restaurantmanager* rm);
-
-
+bool isfirstofmonth();
 
 #endif
