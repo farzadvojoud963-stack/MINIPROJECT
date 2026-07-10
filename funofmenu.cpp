@@ -170,7 +170,6 @@ person *signinmenu(database &db)
             if (username == "exit")
             {
                 break;
-               
             }
         }
         else
@@ -179,7 +178,8 @@ person *signinmenu(database &db)
         }
     }
 
-    if(username == "exit"){
+    if (username == "exit")
+    {
         return nullptr;
     }
 
@@ -240,9 +240,20 @@ void showclientmenu(database &db, client *cl)
         cl->setbadge(p->getbadge());
         cl->setpoints(p->getpoints());
 
+        int nextpoints = cl->getlevelptr()->getnextlevelmin();
+
         cout << "**************the client menu***************\n\n";
-        cout << "your badge is: ( " << cl->getbadge() << " ) | your point is: " << cl->getpoints() << " | your level is: " << cl->getlevel() << " | number of your coins is : " << cl->getmcoins() << endl
-             << endl;
+        cout << "name: " << cl->getfirstname() << " " << cl->getlastname() << " | " << "your badge is: ( " << cl->getbadge() << " )\n";
+        cout << "your point is: " << cl->getpoints() << " | your level is: " << cl->getlevel() << " | number of your coins is : " << cl->getmcoins() << " | points to next level: ";
+        if (nextpoints == -1)
+        {
+            cout << "you are VIP\n\n";
+        }
+        else
+        {
+            cout << nextpoints - cl->getpoints() << endl
+                 << endl;
+        }
         cout << "enter the number of option you want(for exit inter 0)\n";
         cout << "1.show all active restaurants \n2.choose restaurant \n3.show current restaurant menu \n4.add item to shopping cart \n5.show shopping cart \n6.check out order \n7.show history of orders\n\n";
 
@@ -979,15 +990,57 @@ void showmanagermenu(database &db, restaurantmanager *rm)
 
             } while (true);
         }
+
         else if (choice == 4)
         {
-            orderDAO resorder(db);
-            vector<order> myorders = resorder.findorderbyres(rm->getresid());
-            cout << "=========== your order ==============\n";
-            for (int i = 0; i < myorders.size(); i++)
+            orderDAO odao(db);
+            userDAO udao(db);
+            vector<order> orders = odao.findallorders();
+
+            if (orders.empty())
             {
-                myorders[i].showorder(db);
+                cout << "there is no order yet please try again\n";
+                system("pause");
+                system("cls");
+                continue;
             }
+
+            for (int i = 0; i < orders.size(); i++)
+            {
+                person *p = udao.findbyid(orders[i].getclientid());
+                if ((p->getlevel() == "vip") && (orders[i].getresid() == rm->getresid()))
+                {
+                    orders[i].showorder(db);
+                }
+            }
+
+            for (int i = 0; i < orders.size(); i++)
+            {
+                person *p = udao.findbyid(orders[i].getclientid());
+                if ((p->getlevel() == "gold") && (orders[i].getresid() == rm->getresid()))
+                {
+                    orders[i].showorder(db);
+                }
+            }
+
+            for (int i = 0; i < orders.size(); i++)
+            {
+                person *p = udao.findbyid(orders[i].getclientid());
+                if ((p->getlevel() == "silver") && (orders[i].getresid() == rm->getresid()))
+                {
+                    orders[i].showorder(db);
+                }
+            }
+
+            for (int i = 0; i < orders.size(); i++)
+            {
+                person *p = udao.findbyid(orders[i].getclientid());
+                if ((p->getlevel() == "normal") && (orders[i].getresid() == rm->getresid()))
+                {
+                    orders[i].showorder(db);
+                }
+            }
+
             system("pause");
             system("cls");
             continue;
@@ -997,7 +1050,8 @@ void showmanagermenu(database &db, restaurantmanager *rm)
             orderDAO resorder(db);
             vector<order> orders = resorder.findallorders();
 
-            if(orders.empty()){
+            if (orders.empty())
+            {
                 cout << "there is no order yet please try again\n";
                 system("pause");
                 system("cls");
@@ -1069,7 +1123,7 @@ void showadminmenu(database &db, systemadmin *sa)
     do
     {
         cout << "choose an option (enter the number of option)\n";
-        cout << "1.show all restaurants \n2.active/disactive restaurant(you must have id of restaurant) \n3.view salse report \n4.view all users\n5.delete a user\n6.change level of a client \n7.assign coins to all clients \n8.view membership history for all client \n9.view membership history for a contain client \n10.view point history for all \n11.view point history for a contain client \n(enter 0 for exit)\n";
+        cout << "1.show all restaurants \n2.active/disactive restaurant(you must have id of restaurant) \n3.view salse report \n4.view all users\n5.delete a user \n6.change level of a client \n7.assign coins to all clients \n8.view membership history for all client \n9.view membership history for a contain client \n10.view point history for all \n11.view point history for a contain client \n12.set new points for client \n13.view count of each level \n(enter 0 for exit)\n";
         cin >> choice;
         system("cls");
 
@@ -1256,11 +1310,11 @@ void showadminmenu(database &db, systemadmin *sa)
         {
             manager mg(db);
             userDAO dao(db);
-            vector<person> prs = dao.findall();
+            vector<person> prs = dao.findbyroll("client");
 
             if (prs.empty())
             {
-                cout << "there is no user yet\n";
+                cout << "there is no client yet\n";
                 system("pause");
                 system("cls");
                 continue;
@@ -1272,9 +1326,9 @@ void showadminmenu(database &db, systemadmin *sa)
 
             person *p = dao.findbyid(cliid);
 
-            if (p == nullptr)
+            if ((p == nullptr) || !(p->getrole() == "client"))
             {
-                cout << "the user with this id isn't found please try again\n";
+                cout << "the client with this id isn't found please try again\n";
                 system("pause");
                 system("cls");
                 continue;
@@ -1388,7 +1442,8 @@ void showadminmenu(database &db, systemadmin *sa)
 
             for (int i = 0; i < history.size(); i++)
             {
-                cout << "user id: " << history[i].userid << " | " << history[i].oldlevel << " -> " << history[i].newlevel << " | " << history[i].changedat << " | " << history[i].changedby << endl << endl;
+                cout << "user id: " << history[i].userid << " | " << history[i].oldlevel << " -> " << history[i].newlevel << " | " << history[i].changedat << " | " << history[i].changedby << endl
+                     << endl;
             }
             system("pause");
             system("cls");
@@ -1510,9 +1565,114 @@ void showadminmenu(database &db, systemadmin *sa)
 
             for (int i = 0; i < history.size(); i++)
             {
-                cout << "user id: " << history[i].userid << " | change: " << history[i].pointchang << " | reason: " << history[i].reason << " | type: " << history[i].type << " | " << history[i].creatat << endl << endl;
+                cout << "user id: " << history[i].userid << " | change: " << history[i].pointchang << " | reason: " << history[i].reason << " | type: " << history[i].type << " | " << history[i].creatat << endl
+                     << endl;
             }
 
+            system("pause");
+            system("cls");
+            continue;
+        }
+        else if (choice == 12)
+        {
+            loyaltyDAO ldao(db);
+            userDAO udao(db);
+            manager mg(db);
+
+            vector<person> users = udao.findbyroll("client");
+            if (users.empty())
+            {
+                cout << "there is no client yet\n\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            cout << "enter the id of client\n";
+            int cliid;
+            cin >> cliid;
+
+            if ((udao.findbyid(cliid) == nullptr) || (udao.findbyid(cliid)->getrole() != "client"))
+            {
+                cout << "client with this id isn't found\n\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+            person *p = udao.findbyid(cliid);
+
+            int currentpoint = p->getpoints();
+
+            cout << "enter the new points number\n";
+            int newpoints;
+            cin >> newpoints;
+
+            if (mg.addpointwithadmin(p->getid(), newpoints, "admin_point", "point"))
+            {
+                p = udao.findbyid(cliid);
+                p->setlevelptrbylevel();
+                cout << "point is added. user's point is: " << p->getpoints() << endl << endl;
+                while (mg.checkandupgrade(p->getid(), p->getlevelptr(), "admin"))
+                {
+                    cout << "the level is upgraded" << endl;
+                }
+                p = udao.findbyid(cliid);
+                cout << "the new level of client is : " << p->getlevel() << endl;
+            }
+            else
+            {
+                cout << "it's not successfully try again\n\n";
+            }
+            system("pause");
+            system("cls");
+            continue;
+        }
+        else if (choice == 13)
+        {
+            userDAO udao(db);
+            vector<person> users = udao.findbyroll("client");
+
+            if (users.empty())
+            {
+                cout << "there is no client yet\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            int vip = 0;
+            int gold = 0;
+            int silver = 0;
+            int normal = 0;
+
+            for (int i = 0; i < users.size(); i++)
+            {
+                if (users[i].getlevel() == "vip")
+                {
+                    vip++;
+                    continue;
+                }
+                else if (users[i].getlevel() == "gold")
+                {
+                    gold++;
+                    continue;
+                }
+                else if (users[i].getlevel() == "silver")
+                {
+                    silver++;
+                    continue;
+                }
+                else if (users[i].getlevel() == "normal")
+                {
+                    normal++;
+                }
+            }
+
+            cout << "================= client level =================\n\n";
+            cout << "vip level : " << vip << " person\n";
+            cout << "gold level : " << gold << " person\n";
+            cout << "silver level : " << silver << " person\n";
+            cout << "normal level : " << normal << " person\n\n";
             system("pause");
             system("cls");
             continue;

@@ -20,6 +20,7 @@ class manager{
         void addcoins(int id, int coins);
         bool usecoins(int id, int coins);
         void checkbadge(int id);
+        bool addpointwithadmin(int id, int newpoint, string why, string type);
 };
 
 #endif

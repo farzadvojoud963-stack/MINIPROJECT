@@ -100,6 +100,7 @@ void order::showorder(database& db){
 
     cout << "===========factor=============\n";
     cout << "order id : " << orderid << endl;
+    cout << "level of user: " << p->getlevel() << endl;
     cout << "date : " << date << endl;
     cout << "status : " << status << endl;
     cout << std::fixed << std::setprecision(0) << "the total prices (without VAT) is: " << totalprice << endl;
