@@ -197,7 +197,6 @@ person *signinmenu(database &db)
         if (pr->getpassword() == pass)
         {
             return pr;
-            delete pr;
         }
         else
         {
