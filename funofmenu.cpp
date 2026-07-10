@@ -1610,13 +1610,17 @@ void showadminmenu(database &db, systemadmin *sa)
             {
                 p = udao.findbyid(cliid);
                 p->setlevelptrbylevel();
+                string oldlevel = p->getlevel();
                 cout << "point is added. user's point is: " << p->getpoints() << endl << endl;
                 while (mg.checkandupgrade(p->getid(), p->getlevelptr(), "admin"))
                 {
                     cout << "the level is upgraded" << endl;
                 }
                 p = udao.findbyid(cliid);
-                cout << "the new level of client is : " << p->getlevel() << endl;
+                string newlevel = p->getlevel();
+                if(newlevel != oldlevel){
+                    cout << "the new level of client is : " << newlevel << endl;
+                }
             }
             else
             {
