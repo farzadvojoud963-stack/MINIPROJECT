@@ -17,14 +17,13 @@ using std::string;
 
 #include <ctime>
 
-bool isfirstofmonth(){
+bool isfirstofmonth()
+{
     time_t now = time(0);
-    tm* timenow = localtime(&now);
+    tm *timenow = localtime(&now);
 
     return (timenow->tm_mday == 1);
 }
-
-
 
 int firstmenu()
 {
@@ -265,7 +264,7 @@ void showclientmenu(database &db, client *cl)
                  << endl;
         }
         cout << "enter the number of option you want(for exit inter 0)\n";
-        cout << "1.show all active restaurants \n2.choose restaurant \n3.show current restaurant menu \n4.add item to shopping cart \n5.show shopping cart \n6.check out order \n7.show history of orders\n\n";
+        cout << "1.show all active restaurants \n2.choose restaurant \n3.show current restaurant menu \n4.add item to shopping cart \n5.show shopping cart \n6.check out order \n7.show history of orders \n8.cansel an order\n";
 
         cin >> choice;
         system("cls");
@@ -568,27 +567,71 @@ void showclientmenu(database &db, client *cl)
             system("cls");
             continue;
         }
+
         else if (choice == 7)
         {
-            int cliid = cl->getid();
-            orderDAO orders(db);
-
-            vector<order> allorder = orders.findorderbyclient(cliid);
-
-            int flag = 1;
-            if (allorder.empty())
+            orderDAO odao(db);
+            vector<order> orders = odao.findorderbyclient(cl->getid());
+            if (orders.empty())
             {
-                cout << "the history of orders is empty!!\n";
-                flag = 0;
+                cout << "you don't have any order yet\n";
+                system("pause");
+                system("cls");
+                continue;
             }
 
-            if (flag)
+            cout << "============ your orders =============\n\n";
+
+            for (int i = 0; i < orders.size(); i++)
             {
-                cout << "+++++++++++++the history orders+++++++++++\n\n";
-                for (int i = 0; i < allorder.size(); i++)
+                orders[i].showorder(db);
+            }
+
+            system("pause");
+            system("cls");
+            continue;
+        }
+        else if (choice == 8)
+        {
+            orderDAO odao(db);
+            manager mg(db);
+            vector<order> orders = odao.findorderbyclient(cl->getid());
+            if (orders.empty())
+            {
+                cout << "you don't have any order yet\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            cout << "enter order id: \n";
+            int orderid;
+            cin >> orderid;
+
+            order *ord = odao.findorderbyid(orderid);
+            if ((ord == nullptr) || (ord->getclientid() != cl->getid()))
+            {
+                cout << "the order is not found!!!\n";
+                system("pause");
+                system("cls");
+                continue;
+            }
+
+            if (odao.deleteorder(orderid))
+            {
+                cout << "your order is canseld\n";
+                if (mg.addpoints(cl->getid(), (-1) * ord->gettotalpriceafterDAO(), cl->getlevelptr(), "cansel_order", "point"))
                 {
-                    allorder[i].showorder(db);
+                    cout << "the points of this order means : " << mg.calculatepoints(ord->gettotalpriceafterDAO(), cl->getlevelptr()) << " points is removed from your points for canseling\n";
                 }
+                else
+                {
+                    cout << "the points is not removed!!\n";
+                }
+            }
+            else
+            {
+                cout << "the order is not removed please try again\n";
             }
             system("pause");
             system("cls");
@@ -1622,14 +1665,16 @@ void showadminmenu(database &db, systemadmin *sa)
                 p = udao.findbyid(cliid);
                 p->setlevelptrbylevel();
                 string oldlevel = p->getlevel();
-                cout << "point is added. user's point is: " << p->getpoints() << endl << endl;
+                cout << "point is added. user's point is: " << p->getpoints() << endl
+                     << endl;
                 while (mg.checkandupgrade(p->getid(), p->getlevelptr(), "admin"))
                 {
                     cout << "the level is upgraded" << endl;
                 }
                 p = udao.findbyid(cliid);
                 string newlevel = p->getlevel();
-                if(newlevel != oldlevel){
+                if (newlevel != oldlevel)
+                {
                     cout << "the new level of client is : " << newlevel << endl;
                 }
             }

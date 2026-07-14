@@ -17,6 +17,9 @@ bool manager::addpoints(int id, float ordertotal, membershiplevel *level, string
 {
     int addpoints = calculatepoints(ordertotal, level);
     int points = dao.getuserpoints(id) + addpoints;
+    if(points < 0){
+        points = 0;
+    }
     dao.updateuserpoint(id, points);
     return dao.addpointhistory(id, addpoints, why, type);
 }
