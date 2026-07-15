@@ -76,10 +76,10 @@ item &restaurant::getitemofmenuofrestaurant(int id){
 
 
 void restaurant::showrestaurantinfo(){
-    std::cout << "id = " << id << " ..... " << "name = " << name ;
+    std::cout << "id = " << id << " ..... " << "name : " << name << " | address : " << address << " | phone number : " << phone << " | ";
     if(isActive){
-        std::cout << "       active\n";
+        std::cout << " active\n";
     }else{
-        std::cout << "       not active\n";
+        std::cout << " not active\n";
     }
 }
