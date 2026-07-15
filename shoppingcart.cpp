@@ -55,7 +55,7 @@ void shoppingcart::display(int cliid, database& db) const{
         cout << std::defaultfloat;
     }
     float disc = (p->getlevelptr()->getdis() / 100) * gettotal();
-    float shcost = p->getlevelptr()->getshoppingcost();
+    float shcost = p->getlevelptr()->getshoppingcost(gettotal());
     cout << "the total base price is : " << std::fixed << std::setprecision(0) << gettotal() << endl << endl;
     cout << "Discount (" << p->getlevelptr()->getdis() << "%) : -" << disc << endl;
     cout << "shopping const : +" << shcost << endl;

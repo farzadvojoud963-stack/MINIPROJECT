@@ -15,7 +15,6 @@ class manager{
         bool checkandupgrade(int id, membershiplevel*& level, string reason);
         bool changelevelbyadmin(int id, string newlevel);
         float applydiscount(float total, membershiplevel* level);
-        float getshippingcost(membershiplevel* level);
         void assignusercoins(int id);
         void addcoins(int id, int coins);
         bool usecoins(int id, int coins);

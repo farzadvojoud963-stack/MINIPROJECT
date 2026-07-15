@@ -443,7 +443,7 @@ void showclientmenu(database &db, client *cl)
             if (flag)
             {
 
-                float realtotalprice = (cl->getshoppingcart().gettotal() * (1 - (cl->getlevelptr()->getdis() / 100))) + cl->getlevelptr()->getshoppingcost();
+                float realtotalprice = (cl->getshoppingcart().gettotal() * (1 - (cl->getlevelptr()->getdis() / 100))) + cl->getlevelptr()->getshoppingcost(cl->getshoppingcart().gettotal());
 
                 order *norder = cl->getshoppingcart().toorder(cl->getid(), cl->getcurrentresid(), realtotalprice);
 

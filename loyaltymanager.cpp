@@ -74,10 +74,7 @@ float manager::applydiscount(float total, membershiplevel *level)
     return newtotal;
 }
 
-float manager::getshippingcost(membershiplevel *level)
-{
-    return level->getshoppingcost();
-}
+
 
 void manager::assignusercoins(int id)
 {

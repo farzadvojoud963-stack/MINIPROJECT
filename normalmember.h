@@ -13,7 +13,7 @@ class normal : public membershiplevel{
         string getshipstatus() const {return "full";}
         int getnextlevelmin() const {return 100;}
         membershiplevel* getnextlevelptr(){return new silver;}
-        float getshoppingcost() const{return 10000.0;}
+        float getshoppingcost(int tot) const{return 10000.0;}
         ~normal() {}
 };
 
