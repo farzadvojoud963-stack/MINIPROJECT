@@ -134,7 +134,7 @@ void manager::checkbadge(int id)
 {
     int ordercount = dao.getordercount(id);
     string currentbadge = dao.getuserbadge(id);
-    string newbadge = currentbadge;
+    string newbadge = "";
 
     if (ordercount >= 10)
     {

@@ -633,6 +633,7 @@ void showclientmenu(database &db, client *cl)
             {
                 cout << "the order is not removed please try again\n";
             }
+            mg.checkbadge(cl->getid());
             system("pause");
             system("cls");
             continue;
